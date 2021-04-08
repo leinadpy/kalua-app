@@ -6,7 +6,12 @@ import BotonCerrarSesion from "./../elements/BotonCerrarSesion";
 const Menu = () => {
   
   return (
-    <Navbar bg="dark" variant="dark" expand="lg" style={{marginBottom: "20px"}}>
+    <Navbar
+      bg="dark"
+      variant="dark"
+      expand="lg"
+      style={{ marginBottom: "20px" }}
+    >
       <Navbar.Brand>Kalua App</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
@@ -29,7 +34,7 @@ const Menu = () => {
               Lista de categorías
             </NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item as={Link} to="/new-line">
+            <NavDropdown.Item as={Link} to="/lines/new-line">
               Nueva línea
             </NavDropdown.Item>
             <NavDropdown.Item as={Link} to="/lines">
@@ -37,7 +42,7 @@ const Menu = () => {
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Clientes" id="basic-nav-dropdown">
-            <NavDropdown.Item as={Link} to="/new-client">
+            <NavDropdown.Item as={Link} to="/clients/new-client">
               Nuevo cliente
             </NavDropdown.Item>
             <NavDropdown.Item as={Link} to="/clients">
@@ -45,21 +50,21 @@ const Menu = () => {
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Movimiento" id="basic-nav-dropdown">
-            <NavDropdown.Item as={Link} to="/new-purchase">
+            <NavDropdown.Item as={Link} to="/purchases/new-purchase">
               Nueva compra
             </NavDropdown.Item>
             <NavDropdown.Item as={Link} to="/purchases">
               Lista de compras
             </NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item as={Link} to="/new-sales">
+            <NavDropdown.Item as={Link} to="/sales/new-sales">
               Nueva venta
             </NavDropdown.Item>
             <NavDropdown.Item as={Link} to="/sales">
               Lista de ventas
             </NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item as={Link} to="/new-refund">
+            <NavDropdown.Item as={Link} to="/refunds/new-refund">
               Nueva devolución
             </NavDropdown.Item>
             <NavDropdown.Item as={Link} to="/refunds">
@@ -80,7 +85,7 @@ const Menu = () => {
             </NavDropdown.Item>
           </NavDropdown>
         </Nav>
-      <BotonCerrarSesion />
+        <BotonCerrarSesion />
       </Navbar.Collapse>
     </Navbar>
   );

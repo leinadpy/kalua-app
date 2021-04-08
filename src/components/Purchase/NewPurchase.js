@@ -1,22 +1,22 @@
 import React from "react";
 import { Header, Titulo } from "../../elements/Header";
 import { Helmet } from "react-helmet";
-import FormularioClient from "./FormularioClient";
+import FormularioPurchase from "./FormularioPurchase";
 import Menu from "./../Menu";
 
-const NewClient = () => {
+const NewPurchase = () => {
   return (
     <>
       <Menu />
       <Helmet>
-        <title>Nuevo Cliente</title>
+        <title>Nueva Compra</title>
       </Helmet>
       <Header>
-        <Titulo>Nuevo Cliente</Titulo>
+        <Titulo>Nueva Compra</Titulo>
       </Header>
-      <FormularioClient />
+      <FormularioPurchase />
     </>
   );
 };
 
-export default NewClient;
+export default NewPurchase;

@@ -1,7 +1,7 @@
 import { db } from "./../firebaseConfig";
 
-const deleteCategory = (id) => {
+const deleteLine = (id) => {
   db.collection("lines").doc(id).delete();
 };
 
-export default deleteCategory;
+export default deleteLine;

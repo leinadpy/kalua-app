@@ -25,6 +25,14 @@ import NewProduct from "./components/Product/NewProduct"
 import ProductList from "./components/Product/ProductList"
 import EditProduct from "./components/Product/EditProduct"
 
+import NewClient from "./components/Client/NewClient";
+import ClientList from "./components/Client/ClientList";
+import EditClient from "./components/Client/EditClient";
+
+import NewPurchase from "./components/Purchase/NewPurchase";
+// import PurchaseList from "./components/Purchase/PurchaseList";
+// import EditPurchase from "./components/Purchase/EditPurchase";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 
 WebFont.load({
@@ -74,6 +82,20 @@ const Index = () => {
               </RutaPrivada>
               <RutaPrivada path="/products">
                 <ProductList />
+              </RutaPrivada>
+
+              <RutaPrivada path="/clients/new-client">
+                <NewClient />
+              </RutaPrivada>
+              <RutaPrivada path="/clients/edit/:id">
+                <EditClient />
+              </RutaPrivada>
+              <RutaPrivada path="/clients">
+                <ClientList />
+              </RutaPrivada>
+
+              <RutaPrivada path="/purchases/new-purchase">
+                <NewPurchase />
               </RutaPrivada>
 
               <RutaPrivada path="/">

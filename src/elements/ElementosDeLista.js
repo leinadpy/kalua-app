@@ -74,7 +74,6 @@ const Categoria = styled.div`
 
 const Descripcion = styled.div`
   font-size: 1.25rem;
-  text-transform: capitalize;
   @media (max-width: 50rem) {
     /* 50px */
     justify-content: end;
@@ -148,6 +147,31 @@ const BotonAccion = styled.button`
   }
 `;
 
+const BotonAccionSmall = styled.button`
+  background: #343a40;
+  width: auto; 
+  margin-left: 5rem; /* 20px */
+  margin-top: 1.9rem;
+  border: none;
+  border-radius: 0.625rem; /* 10px */
+  color: #fff;
+  font-family: "Work Sans", sans-serif;
+  height: 2.5rem;
+  padding: 1.25rem 1.87rem; /* 20px 30px */
+  font-size: 1.25rem; /* 20px */
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  outline: none;
+
+  &:hover {
+    background: ${theme.grisClaro2};
+  }
+`;
+
 const ContenedorSubtitulo = styled.div`
   height: 100%;
   display: flex;
@@ -203,6 +227,7 @@ export {
   Fecha,
   ContenedorBotones,
   BotonAccion,
+  BotonAccionSmall,
   BotonCargarMas,
   ContenedorBotonCentral,
   ContenedorSubtitulo,

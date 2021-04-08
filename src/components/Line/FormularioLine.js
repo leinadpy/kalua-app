@@ -34,7 +34,7 @@ const FormularioLine = ({ line }) => {
     setAlerta({});
 
     // Comprobamos que haya una línea
-    if (setInputDescriptionLine !== "") {
+    if (inputDescriptionLine !== "") {
       if (line) {
         editLine({
           id: line.id,

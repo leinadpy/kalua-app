@@ -46,7 +46,7 @@ const ContenedorInput = styled.div`
     border: none;
     cursor: pointer;
     border-radius: 0.625rem; /* 10px */
-    height: 5rem; /* 80px */
+    height: 2.5rem;
     width: 100%;
     padding: 0 1.25rem; /* 20px */
     font-size: 1.5rem; /* 24px */

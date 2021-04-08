@@ -5,7 +5,7 @@ const useGetClients = () => {
   const [clients, setClients] = useState([]);
 
   useEffect(() => {
-    const unsuscribe = db.collection("products").onSnapshot((snapshot) => {
+    const unsuscribe = db.collection("clients").onSnapshot((snapshot) => {
       setClients(
         snapshot.docs.map((client) => {
           return { ...client.data(), id: client.id };
