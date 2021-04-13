@@ -2,21 +2,22 @@ import React, { useState, useEffect } from "react";
 import Boton from "../../elements/Boton";
 import { ContenedorBoton } from "../../elements/ElementosDeFormulario";
 import Alerta from "../../elements/Alerta";
-import editPurchase from "../../firebase/purchases/editPurchase";
-import addPurchase from "./../../firebase/purchases/addPurchase";
+import editRefund from "../../firebase/refunds/editRefund";
+import addRefund from "./../../firebase/refunds/addRefund";
 import { useHistory } from "react-router-dom";
 import { Form, Col } from "react-bootstrap";
 import DatePicker from "./../DatePicker";
 import { getUnixTime } from "date-fns";
-import FormularioDetailPurchase from "./FormularioDetailPurchase";
-import DetailPurchaseList from "./DetailPurchaseList";
-import {fromUnixTime} from "date-fns"
+import FormularioDetailRefund from "./FormularioDetailRefund";
+import DetailRefundList from "./DetailRefundList";
+import { fromUnixTime } from "date-fns";
 
-const FormularioPurchase = ({ purchase }) => {
+const FormularioRefund = ({ refund }) => {
   const [inputInvoiceNumber, setInputInvoiceNumber] = useState("");
-  const [datePurchase, setDatePurchase] = useState(new Date());
+  const [inputClient, setInputClient] = useState("");
+  const [dateRefund, setDateRefund] = useState(new Date());
   const [total, setTotal] = useState(0);
-  const [detailsPurchases, setDetailsPurchases] = useState([]);
+  const [detailsRefunds, setDetailsRefunds] = useState([]);
 
   const [estadoAlerta, setEstadoAlerta] = useState(false);
   const [alerta, setAlerta] = useState({});
@@ -25,18 +26,22 @@ const FormularioPurchase = ({ purchase }) => {
   useEffect(() => {
     // Comprobamos si ya hay alguna compra.
     // De ser así establecemos todo el state con los valores de la compra.
-    if (purchase) {
-      setInputInvoiceNumber(purchase.data().invoiceNumber);
-      setDatePurchase(fromUnixTime(purchase.data().datePurchase));
-      setTotal(purchase.data().total);
-      setDetailsPurchases(purchase.data().detailsPurchases);
+    if (refund) {
+      setInputInvoiceNumber(refund.data().invoiceNumber);
+      setInputClient(refund.data().client);
+      setDateRefund(fromUnixTime(refund.data().dateRefund));
+      setTotal(refund.data().total);
+      setDetailsRefunds(refund.data().detailsRefunds);
     }
-  }, [purchase]);
+  }, [refund]);
 
   const handleChange = (e) => {
     switch (e.target.name) {
       case "invoiceNumber":
         setInputInvoiceNumber(e.target.value);
+        break;
+      case "client":
+        setInputClient(e.target.value);
         break;
       default:
         break;
@@ -47,39 +52,46 @@ const FormularioPurchase = ({ purchase }) => {
     e.preventDefault();
     setEstadoAlerta(false);
     setAlerta({});
-    // Comprobamos que haya una compra
-    if (inputInvoiceNumber !== "" && detailsPurchases.length !== 0) {
-      if (purchase) {
-        editPurchase({
-          id: purchase.id,
+    // Comprobamos que haya una venta
+    if (
+      inputInvoiceNumber !== "" &&
+      inputClient !== "" &&
+      detailsRefunds.length !== 0
+    ) {
+      if (refund) {
+        editRefund({
+          id: refund.id,
           invoiceNumber: inputInvoiceNumber,
-          datePurchase: getUnixTime(datePurchase),
+          client: inputClient,
+          dateRefund: getUnixTime(dateRefund),
           total: total,
-          detailsPurchases: detailsPurchases,
+          detailsRefunds: detailsRefunds,
         })
           .then(() => {
-            history.push("/purchases");
+            history.push("/refunds");
           })
           .catch((error) => {
             console.log(error);
           });
       } else {
-        addPurchase({
+        addRefund({
           invoiceNumber: inputInvoiceNumber,
-          datePurchase: getUnixTime(datePurchase),
+          client: inputClient,
+          dateRefund: getUnixTime(dateRefund),
           total: total,
-          detailsPurchases: detailsPurchases,
+          detailsRefunds: detailsRefunds,
         })
           .then(() => {
             setInputInvoiceNumber("");
-            setDatePurchase(new Date());
+            setInputClient("");
+            setDateRefund(new Date());
             setTotal("");
-            setDetailsPurchases([]);
+            setDetailsRefunds([]);
 
             setEstadoAlerta(true);
             setAlerta({
               tipo: "exito",
-              mensaje: "La compra fue agregada correctamente",
+              mensaje: "La devolución fue agregada correctamente",
             });
           })
           .catch((error) => {
@@ -113,25 +125,35 @@ const FormularioPurchase = ({ purchase }) => {
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group as={Col} controlId="formGridDatePurchase">
+          <Form.Group as={Col} controlId="formGridClient">
+            <Form.Label>Cliente</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Cliente"
+              name="client"
+              value={inputClient}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group as={Col} controlId="formGridDateRefund">
             <Form.Label>Fecha de compra</Form.Label>
-            <DatePicker fecha={datePurchase} setFecha={setDatePurchase} />
+            <DatePicker fecha={dateRefund} setFecha={setDateRefund} />
           </Form.Group>
         </Form.Row>
-        <FormularioDetailPurchase
-          detailsPurchases={detailsPurchases}
-          setDetailsPurchases={setDetailsPurchases}
+        <FormularioDetailRefund
+          detailsRefunds={detailsRefunds}
+          setDetailsRefunds={setDetailsRefunds}
           setTotal={setTotal}
         />
-        <DetailPurchaseList
-          detailsPurchases={detailsPurchases}
-          setDetailsPurchases={setDetailsPurchases}
+        <DetailRefundList
+          detailsRefunds={detailsRefunds}
+          setDetailsRefunds={setDetailsRefunds}
           total={total}
           setTotal={setTotal}
         />
         <ContenedorBoton>
           <Boton as="button" primario type="submit">
-            {purchase ? "Editar Compra" : "Agregar Compra"}
+            {refund ? "Editar Devolución" : "Agregar Devolución"}
           </Boton>
         </ContenedorBoton>
         <Alerta
@@ -145,4 +167,4 @@ const FormularioPurchase = ({ purchase }) => {
   );
 };
 
-export default FormularioPurchase;
+export default FormularioRefund;

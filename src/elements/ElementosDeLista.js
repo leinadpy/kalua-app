@@ -121,6 +121,7 @@ const BotonAccion = styled.button`
   background: ${theme.grisClaro};
   border: none;
   width: 2.5rem; /* 40px */
+  display: inline-block;
   height: 2.5rem; /* 40px */
   line-height: 2.5rem; /* 40px */
   font-size: 16px;
@@ -135,6 +136,7 @@ const BotonAccion = styled.button`
 
   &:hover {
     background: ${theme.grisClaro2};
+    opacity: 1;
   }
 
   svg {

@@ -2,21 +2,22 @@ import React, { useState, useEffect } from "react";
 import Boton from "../../elements/Boton";
 import { ContenedorBoton } from "../../elements/ElementosDeFormulario";
 import Alerta from "../../elements/Alerta";
-import editPurchase from "../../firebase/purchases/editPurchase";
-import addPurchase from "./../../firebase/purchases/addPurchase";
+import editSale from "../../firebase/sales/editSale";
+import addSale from "./../../firebase/sales/addSale";
 import { useHistory } from "react-router-dom";
 import { Form, Col } from "react-bootstrap";
 import DatePicker from "./../DatePicker";
 import { getUnixTime } from "date-fns";
-import FormularioDetailPurchase from "./FormularioDetailPurchase";
-import DetailPurchaseList from "./DetailPurchaseList";
-import {fromUnixTime} from "date-fns"
+import FormularioDetailSale from "./FormularioDetailSale";
+import DetailSaleList from "./DetailSaleList";
+import { fromUnixTime } from "date-fns";
 
-const FormularioPurchase = ({ purchase }) => {
+const FormularioSale = ({ sale }) => {
   const [inputInvoiceNumber, setInputInvoiceNumber] = useState("");
-  const [datePurchase, setDatePurchase] = useState(new Date());
+  const [inputClient, setInputClient] = useState("");
+  const [dateSale, setDateSale] = useState(new Date());
   const [total, setTotal] = useState(0);
-  const [detailsPurchases, setDetailsPurchases] = useState([]);
+  const [detailsSales, setDetailsSales] = useState([]);
 
   const [estadoAlerta, setEstadoAlerta] = useState(false);
   const [alerta, setAlerta] = useState({});
@@ -25,18 +26,22 @@ const FormularioPurchase = ({ purchase }) => {
   useEffect(() => {
     // Comprobamos si ya hay alguna compra.
     // De ser así establecemos todo el state con los valores de la compra.
-    if (purchase) {
-      setInputInvoiceNumber(purchase.data().invoiceNumber);
-      setDatePurchase(fromUnixTime(purchase.data().datePurchase));
-      setTotal(purchase.data().total);
-      setDetailsPurchases(purchase.data().detailsPurchases);
+    if (sale) {
+      setInputInvoiceNumber(sale.data().invoiceNumber);
+      setInputClient(sale.data().client);
+      setDateSale(fromUnixTime(sale.data().dateSale));
+      setTotal(sale.data().total);
+      setDetailsSales(sale.data().detailsSales);
     }
-  }, [purchase]);
+  }, [sale]);
 
   const handleChange = (e) => {
     switch (e.target.name) {
       case "invoiceNumber":
         setInputInvoiceNumber(e.target.value);
+        break;
+      case "client":
+        setInputClient(e.target.value);
         break;
       default:
         break;
@@ -47,39 +52,46 @@ const FormularioPurchase = ({ purchase }) => {
     e.preventDefault();
     setEstadoAlerta(false);
     setAlerta({});
-    // Comprobamos que haya una compra
-    if (inputInvoiceNumber !== "" && detailsPurchases.length !== 0) {
-      if (purchase) {
-        editPurchase({
-          id: purchase.id,
+    // Comprobamos que haya una venta
+    if (
+      inputInvoiceNumber !== "" &&
+      inputClient !== "" &&
+      detailsSales.length !== 0
+    ) {
+      if (sale) {
+        editSale({
+          id: sale.id,
           invoiceNumber: inputInvoiceNumber,
-          datePurchase: getUnixTime(datePurchase),
+          client: inputClient,
+          dateSale: getUnixTime(dateSale),
           total: total,
-          detailsPurchases: detailsPurchases,
+          detailsSales: detailsSales,
         })
           .then(() => {
-            history.push("/purchases");
+            history.push("/sales");
           })
           .catch((error) => {
             console.log(error);
           });
       } else {
-        addPurchase({
+        addSale({
           invoiceNumber: inputInvoiceNumber,
-          datePurchase: getUnixTime(datePurchase),
+          client: inputClient,
+          dateSale: getUnixTime(dateSale),
           total: total,
-          detailsPurchases: detailsPurchases,
+          detailsSales: detailsSales,
         })
           .then(() => {
             setInputInvoiceNumber("");
-            setDatePurchase(new Date());
+            setInputClient("");
+            setDateSale(new Date());
             setTotal("");
-            setDetailsPurchases([]);
+            setDetailsSales([]);
 
             setEstadoAlerta(true);
             setAlerta({
               tipo: "exito",
-              mensaje: "La compra fue agregada correctamente",
+              mensaje: "La venta fue agregada correctamente",
             });
           })
           .catch((error) => {
@@ -113,25 +125,35 @@ const FormularioPurchase = ({ purchase }) => {
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group as={Col} controlId="formGridDatePurchase">
+          <Form.Group as={Col} controlId="formGridClient">
+            <Form.Label>Cliente</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Cliente"
+              name="client"
+              value={inputClient}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group as={Col} controlId="formGriddateSale">
             <Form.Label>Fecha de compra</Form.Label>
-            <DatePicker fecha={datePurchase} setFecha={setDatePurchase} />
+            <DatePicker fecha={dateSale} setFecha={setDateSale} />
           </Form.Group>
         </Form.Row>
-        <FormularioDetailPurchase
-          detailsPurchases={detailsPurchases}
-          setDetailsPurchases={setDetailsPurchases}
+        <FormularioDetailSale
+          detailsSales={detailsSales}
+          setDetailsSales={setDetailsSales}
           setTotal={setTotal}
         />
-        <DetailPurchaseList
-          detailsPurchases={detailsPurchases}
-          setDetailsPurchases={setDetailsPurchases}
+        <DetailSaleList
+          detailsSales={detailsSales}
+          setDetailsSales={setDetailsSales}
           total={total}
           setTotal={setTotal}
         />
         <ContenedorBoton>
           <Boton as="button" primario type="submit">
-            {purchase ? "Editar Compra" : "Agregar Compra"}
+            {sale ? "Editar Venta" : "Agregar Venta"}
           </Boton>
         </ContenedorBoton>
         <Alerta
@@ -145,4 +167,4 @@ const FormularioPurchase = ({ purchase }) => {
   );
 };
 
-export default FormularioPurchase;
+export default FormularioSale;

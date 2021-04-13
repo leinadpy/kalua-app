@@ -24,14 +24,23 @@ import EditLine from "./components/Line/EditLine"
 import NewProduct from "./components/Product/NewProduct"
 import ProductList from "./components/Product/ProductList"
 import EditProduct from "./components/Product/EditProduct"
+import ProductListStock from "./components/Product/ProductListStock";
 
 import NewClient from "./components/Client/NewClient";
 import ClientList from "./components/Client/ClientList";
 import EditClient from "./components/Client/EditClient";
 
 import NewPurchase from "./components/Purchase/NewPurchase";
-// import PurchaseList from "./components/Purchase/PurchaseList";
-// import EditPurchase from "./components/Purchase/EditPurchase";
+import PurchaseList from "./components/Purchase/PurchaseList";
+import EditPurchase from "./components/Purchase/EditPurchase";
+
+import NewSale from "./components/Sale/NewSale";
+import SaleList from "./components/Sale/SaleList";
+import EditSale from "./components/Sale/EditSale";
+
+import NewRefund from "./components/Refund/NewRefund";
+import RefundList from "./components/Refund/RefundList";
+import EditRefund from "./components/Refund/EditRefund";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -83,6 +92,9 @@ const Index = () => {
               <RutaPrivada path="/products">
                 <ProductList />
               </RutaPrivada>
+              <RutaPrivada path="/stock">
+                <ProductListStock />
+              </RutaPrivada>
 
               <RutaPrivada path="/clients/new-client">
                 <NewClient />
@@ -96,6 +108,32 @@ const Index = () => {
 
               <RutaPrivada path="/purchases/new-purchase">
                 <NewPurchase />
+              </RutaPrivada>
+              <RutaPrivada path="/purchases/edit/:id">
+                <EditPurchase />
+              </RutaPrivada>
+              <RutaPrivada path="/purchases">
+                <PurchaseList />
+              </RutaPrivada>
+
+              <RutaPrivada path="/sales/new-sale">
+                <NewSale />
+              </RutaPrivada>
+              <RutaPrivada path="/sales/edit/:id">
+                <EditSale />
+              </RutaPrivada>
+              <RutaPrivada path="/sales">
+                <SaleList />
+              </RutaPrivada>
+
+              <RutaPrivada path="/refunds/new-refund">
+                <NewRefund />
+              </RutaPrivada>
+              <RutaPrivada path="/refunds/edit/:id">
+                <EditRefund />
+              </RutaPrivada>
+              <RutaPrivada path="/refunds">
+                <RefundList />
               </RutaPrivada>
 
               <RutaPrivada path="/">

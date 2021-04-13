@@ -3,9 +3,9 @@ import { Form, Col } from "react-bootstrap";
 import { BotonAccionSmall } from "./../../elements/ElementosDeLista";
 import useGetProducts from "./../../hooks/products/useGetProducts";
 
-const FormularioDetailPurchase = ({
-  detailsPurchases,
-  setDetailsPurchases,
+const FormularioDetailSale = ({
+  detailsSales,
+  setDetailsSales,
   setTotal,
 }) => {
   const [inputCode, setInputCode] = useState("");
@@ -13,7 +13,9 @@ const FormularioDetailPurchase = ({
   const [inputSizeCode, setInputSizeCode] = useState("");
   const [inputColorCode, setInputColorCode] = useState("");
   const [inputQuantity, setInputQuantity] = useState("");
-  const [inputPurchPrice, setInputPurchPrice] = useState("");
+  const [inputSalePrice, setInputSalePrice] = useState("");
+
+//   const [quantityAvailable, setQuantityAvailable] = useState("");
 
   const [products] = useGetProducts();
 
@@ -21,7 +23,6 @@ const FormularioDetailPurchase = ({
     if (inputCode !== "") {
       products.forEach((product) => {
         if (product.code === inputCode) {
-          setInputPurchPrice(product.basicPrice);
           setInputProduct(product.description);
         }
       });
@@ -45,8 +46,8 @@ const FormularioDetailPurchase = ({
       case "quantity":
         setInputQuantity(e.target.value);
         break;
-      case "purchPrice":
-        setInputPurchPrice(e.target.value);
+      case "salePrice":
+        setInputSalePrice(e.target.value);
         break;
 
       default:
@@ -55,7 +56,7 @@ const FormularioDetailPurchase = ({
   };
 
   const calcularSubtotal = () => {
-    const sub = inputQuantity * inputPurchPrice;
+    const sub = inputQuantity * inputSalePrice;
     setTotal((prevState) => prevState + sub);
     return sub;
   };
@@ -63,16 +64,16 @@ const FormularioDetailPurchase = ({
   const addDetail = (e) => {
     e.preventDefault();
     const subtotal = calcularSubtotal();
-    setDetailsPurchases([
-      ...detailsPurchases,
+    setDetailsSales([
+      ...detailsSales,
       {
-        id: detailsPurchases.length,
+        id: detailsSales.length,
         code: inputCode,
         product: inputproduct,
         sizeCode: inputSizeCode,
         colorCode: inputColorCode,
         quantity: inputQuantity,
-        purchPrice: inputPurchPrice,
+        purchPrice: inputSalePrice,
         subtotal: subtotal,
       },
     ]);
@@ -81,7 +82,7 @@ const FormularioDetailPurchase = ({
     setInputSizeCode("");
     setInputColorCode("");
     setInputQuantity("");
-    setInputPurchPrice("");
+    setInputSalePrice("");
   };
 
   return (
@@ -142,13 +143,13 @@ const FormularioDetailPurchase = ({
             onChange={handleChange}
           />
         </Form.Group>
-        <Form.Group as={Col} controlId="formGridPurchPrice">
-          <Form.Label>Precio Compra</Form.Label>
+        <Form.Group as={Col} controlId="formGridSalePrice">
+          <Form.Label>Precio Venta</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Precio Compra"
-            name="purchPrice"
-            value={inputPurchPrice}
+            placeholder="Precio Venta"
+            name="salePrice"
+            value={inputSalePrice}
             onChange={handleChange}
           />
         </Form.Group>
@@ -162,4 +163,4 @@ const FormularioDetailPurchase = ({
   );
 };
 
-export default FormularioDetailPurchase;
+export default FormularioDetailSale;

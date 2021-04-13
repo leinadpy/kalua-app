@@ -10,8 +10,11 @@ const Boton = styled(Link)`
   color: #fff;
   font-family: "Work Sans", sans-serif;
   height: ${(props) =>
-    props.small === "true" ? "2.5rem" : "3.75rem"}; /* 60px */
-  padding: 1.25rem 1.87rem; /* 20px 30px */
+    props.small === "true" ? "auto" : "3.75rem"}; /* 60px */
+  padding: ${(props) =>
+    props.small === "true"
+      ? "0.75rem 1.0rem"
+      : "1.25rem 1.87rem"}; /* 20px 30px */
   font-size: 1.25rem; /* 20px */
   font-weight: 500;
   cursor: pointer;
@@ -20,7 +23,6 @@ const Boton = styled(Link)`
   justify-content: space-between;
   align-items: center;
   outline: none;
-
   svg {
     height: ${(props) => (props.iconoGrande ? "100%" : "0.75rem;")}; /* 12px */
     fill: white;

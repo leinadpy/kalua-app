@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Header, Titulo, ContenedorHeader } from "./../../elements/Header";
 import { Helmet } from "react-helmet";
-import useGetPurchases from "./../../hooks/purchases/useGetPurchases";
-import deletePurchase from "./../../firebase/purchases/deletePurchase";
+import useGetRefunds from "./../../hooks/refunds/useGetRefunds";
+import deleteRefund from "./../../firebase/refunds/deleteRefund";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
@@ -16,11 +16,11 @@ import { Link } from "react-router-dom";
 import convertirAMoneda from "./../../funciones/convertirAMoneda";
 import formatearFecha from "./../../funciones/formatearFecha";
 
-const PurchaseList = () => {
-  const [purchases, setPurchases] = useState("");
+const RefundList = () => {
+  const [sales, setSales] = useState("");
   const [cargando, setCargando] = useState(true);
 
-  const [dataPurchases] = useGetPurchases();
+  const [dataRefunds] = useGetRefunds();
 
   useEffect(() => {
     var datosFormateados = [];
@@ -29,14 +29,15 @@ const PurchaseList = () => {
       datos.forEach((dato) => {
         datoFormateado = {
           invoiceNumber: dato.invoiceNumber,
-          datePurchase: formatearFecha(dato.datePurchase, "dd/MM/yyyy"),
+          client: dato.client,
+          dateRefund: formatearFecha(dato.dateRefund, "dd/MM/yyyy"),
           total: convertirAMoneda(dato.total),
           abm: (
             <>
-              <Boton to={`/purchases/edit/${dato.id}`} small="true" as={Link}>
+              <Boton to={`/refunds/edit/${dato.id}`} small="true" as={Link}>
                 <IconoEditar />
               </Boton>
-              <Boton small="true" onClick={() => deletePurchase(dato.id)}>
+              <Boton small="true" onClick={() => deleteRefund(dato.id)}>
                 <IconoBorrar />
               </Boton>
             </>
@@ -45,10 +46,10 @@ const PurchaseList = () => {
         datosFormateados.push(datoFormateado);
       });
     };
-    formatData(dataPurchases);
-    setPurchases(datosFormateados);
+    formatData(dataRefunds);
+    setSales(datosFormateados);
     setCargando(false);
-  }, [dataPurchases]);
+  }, [dataRefunds]);
 
   const data = {
     columns: [
@@ -59,8 +60,14 @@ const PurchaseList = () => {
         width: 150,
       },
       {
-        label: "Fecha compra",
-        field: "datePurchase",
+        label: "Cliente",
+        field: "client",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Fecha devolución",
+        field: "dateRefund",
         sort: "asc",
         width: 150,
       },
@@ -77,28 +84,28 @@ const PurchaseList = () => {
         width: 100,
       },
     ],
-    rows: purchases,
+    rows: sales,
   };
 
   return (
     <>
       <Helmet>
-        <title>Lista de compras</title>
+        <title>Lista de devoluciones</title>
       </Helmet>
       <Menu />
       <Header>
         <ContenedorHeader>
-          <Titulo>Lista de compras</Titulo>
+          <Titulo>Lista de devoluciones</Titulo>
         </ContenedorHeader>
       </Header>
 
       {!cargando ? (
-        dataPurchases.length !== 0 ? (
+        dataRefunds.length !== 0 ? (
           <ContenedorTabla>
             <MDBDataTable striped bordered small data={data} />
           </ContenedorTabla>
         ) : (
-          <h3>No hay compras para mostrar</h3>
+          <h3>No hay devoluciones para mostrar</h3>
         )
       ) : (
         <div
@@ -112,4 +119,4 @@ const PurchaseList = () => {
   );
 };
 
-export default PurchaseList;
+export default RefundList;

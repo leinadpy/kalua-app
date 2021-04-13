@@ -57,7 +57,7 @@ const Menu = () => {
               Lista de compras
             </NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item as={Link} to="/sales/new-sales">
+            <NavDropdown.Item as={Link} to="/sales/new-sale">
               Nueva venta
             </NavDropdown.Item>
             <NavDropdown.Item as={Link} to="/sales">

@@ -13,19 +13,12 @@ const Fila = styled.td`
   text-align: center;
 `;
 
-const DetailPurchaseList = ({
-  detailsPurchases,
-  setDetailsPurchases,
-  total,
-  setTotal,
-}) => {
+const DetailRefundList = ({ detailsRefunds, setDetailsRefunds, total, setTotal }) => {
   const onRemoveItem = (e, index) => {
     e.preventDefault();
-    setTotal((prevState) => prevState - detailsPurchases[index].subtotal);
-    const newDetailsPurchases = detailsPurchases.filter(
-      (item, j) => index !== j
-    );
-    setDetailsPurchases(newDetailsPurchases);
+    setTotal((prevState) => prevState - detailsRefunds[index].subtotal);
+    const newDetailsRefunds = detailsRefunds.filter((item, j) => index !== j);
+    setDetailsRefunds(newDetailsRefunds);
   };
 
   return (
@@ -43,7 +36,7 @@ const DetailPurchaseList = ({
         </tr>
       </thead>
       <tbody>
-        {detailsPurchases.map((detail, index) => (
+        {detailsRefunds.map((detail, index) => (
           <tr key={index}>
             <Fila>
               <BotonAccion onClick={(e) => onRemoveItem(e, index)}>
@@ -55,7 +48,7 @@ const DetailPurchaseList = ({
             <Fila>{detail.sizeCode}</Fila>
             <Fila>{detail.colorCode}</Fila>
             <Fila>{detail.quantity}</Fila>
-            <Fila>{convertirAMoneda(detail.purchPrice)}</Fila>
+            <Fila>{convertirAMoneda(detail.refundPrice)}</Fila>
             <Fila>{convertirAMoneda(detail.subtotal)}</Fila>
           </tr>
         ))}
@@ -75,4 +68,4 @@ const DetailPurchaseList = ({
   );
 };
 
-export default DetailPurchaseList;
+export default DetailRefundList;

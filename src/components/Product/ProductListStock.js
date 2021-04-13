@@ -1,24 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Header, Titulo, ContenedorHeader } from "./../../elements/Header";
 import { Helmet } from "react-helmet";
-import useGetClients from "./../../hooks/clients/useGetClients";
-import deleteClient from "./../../firebase/clients/deleteClient";
+import useGetProductsStock from "./../../hooks/productsStock/useGetProductsStock";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 import ContenedorTabla from "./../../elements/ContenedorTabla";
 import Menu from "./../Menu";
-import { ReactComponent as IconoEditar } from "./../../imagenes/editar.svg";
-import { ReactComponent as IconoBorrar } from "./../../imagenes/borrar.svg";
 import { MDBDataTable } from "mdbreact";
-import Boton from "./../../elements/Boton";
-import { Link } from "react-router-dom";
 
-const ClientList = () => {
-  const [clients, setClients] = useState("");
+const ProductListStock = () => {
+  const [productsStock, setProductsStock] = useState("");
   const [cargando, setCargando] = useState(true);
 
-  const [dataClients] = useGetClients();
+  const [dataProductsStock] = useGetProductsStock();
 
   useEffect(() => {
     var datosFormateados = [];
@@ -26,84 +21,75 @@ const ClientList = () => {
     const formatData = (datos) => {
       datos.forEach((dato) => {
         datoFormateado = {
-          name: dato.name,
-          document: dato.document,
-          phone: dato.phone,
-          email: dato.email,
-          abm: (
-            <>
-              <Boton to={`/clients/edit/${dato.id}`} small="true" as={Link}>
-                <IconoEditar />
-              </Boton>
-              <Boton small="true" onClick={() => deleteClient(dato.id)}>
-                <IconoBorrar />
-              </Boton>
-            </>
-          ),
+          code: dato.code,
+          description: dato.description,
+          sizeCode: dato.sizeCode,
+          colorCode: dato.colorCode,
+          quantity: dato.quantity,
         };
         datosFormateados.push(datoFormateado);
       });
     };
-    formatData(dataClients);
-    setClients(datosFormateados);
+    formatData(dataProductsStock);
+    setProductsStock(datosFormateados);
     setCargando(false);
-  }, [dataClients]);
+  }, [dataProductsStock]);
 
   const data = {
     columns: [
       {
-        label: "Nombre",
-        field: "name",
+        label: "Código",
+        field: "code",
         sort: "asc",
         width: 150,
       },
       {
-        label: "Documento",
-        field: "document",
+        label: "Descripción",
+        field: "description",
         sort: "asc",
         width: 150,
       },
       {
-        label: "Teléfono",
-        field: "phone",
+        label: "Tamaño",
+        field: "sizeCode",
         sort: "asc",
         width: 150,
       },
       {
-        label: "E-mail",
-        field: "email",
+        label: "Color",
+        field: "colorCode",
         sort: "asc",
         width: 150,
       },
       {
-        label: "ABM",
-        field: "abm",
+        label: "Cantidad",
+        field: "quantity",
         sort: "asc",
-        width: 100,
-      },
+        width: 150,
+      }
     ],
-    rows: clients,
+    rows: productsStock,
   };
 
   return (
     <>
       <Helmet>
-        <title>Lista de clientes</title>
+        <title>Stock de productos</title>
       </Helmet>
       <Menu />
       <Header>
         <ContenedorHeader>
-          <Titulo>Lista de clientes</Titulo>
+          <Titulo>Stock de productos</Titulo>
         </ContenedorHeader>
       </Header>
 
       {!cargando ? (
-        dataClients.length !== 0 ? (
+        dataProductsStock.length !== 0 ? (
           <ContenedorTabla>
             <MDBDataTable striped bordered small data={data} />
           </ContenedorTabla>
         ) : (
-          <h3>No hay clientes para mostrar</h3>
+          <h3>No hay productos en stock para mostrar</h3>
         )
       ) : (
         <div
@@ -117,4 +103,4 @@ const ClientList = () => {
   );
 };
 
-export default ClientList;
+export default ProductListStock;
