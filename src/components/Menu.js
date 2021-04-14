@@ -63,13 +63,13 @@ const Menu = () => {
             <NavDropdown.Item as={Link} to="/sales">
               Lista de ventas
             </NavDropdown.Item>
-            <NavDropdown.Divider />
+            {/* <NavDropdown.Divider />
             <NavDropdown.Item as={Link} to="/refunds/new-refund">
               Nueva devolución
             </NavDropdown.Item>
             <NavDropdown.Item as={Link} to="/refunds">
               Lista de devolución
-            </NavDropdown.Item>
+            </NavDropdown.Item> */}
           </NavDropdown>
           <NavDropdown title="Reportes" id="basic-nav-dropdown">
             <NavDropdown.Item as={Link} to="/purchasesreports">
