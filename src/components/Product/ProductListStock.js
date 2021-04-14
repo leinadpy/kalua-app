@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Header, Titulo, ContenedorHeader } from "./../../elements/Header";
 import { Helmet } from "react-helmet";
-import useGetProductsStock from "./../../hooks/productsStock/useGetProductsStock";
+import {useStockProduct} from "./../../contextos/ProductStockContext";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
@@ -13,7 +13,7 @@ const ProductListStock = () => {
   const [productsStock, setProductsStock] = useState("");
   const [cargando, setCargando] = useState(true);
 
-  const [dataProductsStock] = useGetProductsStock();
+  const dataProductsStock = useStockProduct();
 
   useEffect(() => {
     var datosFormateados = [];
@@ -22,7 +22,7 @@ const ProductListStock = () => {
       datos.forEach((dato) => {
         datoFormateado = {
           code: dato.code,
-          description: dato.description,
+          product: dato.product,
           sizeCode: dato.sizeCode,
           colorCode: dato.colorCode,
           quantity: dato.quantity,
@@ -45,7 +45,7 @@ const ProductListStock = () => {
       },
       {
         label: "Descripción",
-        field: "description",
+        field: "product",
         sort: "asc",
         width: 150,
       },

@@ -56,7 +56,7 @@ const FormularioDetailPurchase = ({
 
   const calcularSubtotal = () => {
     const sub = inputQuantity * inputPurchPrice;
-    setTotal((prevState) => prevState + sub);
+    setTotal((prevState) => Number(prevState) + Number(sub));
     return sub;
   };
 

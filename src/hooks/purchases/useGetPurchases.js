@@ -8,7 +8,10 @@ const useGetPurchases = () => {
     const unsuscribe = db.collection("purchases").onSnapshot((snapshot) => {
       setPurchases(
         snapshot.docs.map((purchase) => {
-          return { ...purchase.data(), id: purchase.id };
+          return {
+            ...purchase.data(),
+            id: purchase.id,
+          };
         })
       );
     });

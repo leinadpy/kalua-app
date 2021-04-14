@@ -73,7 +73,7 @@ const FormularioDetailSale = ({
         sizeCode: inputSizeCode,
         colorCode: inputColorCode,
         quantity: inputQuantity,
-        purchPrice: inputSalePrice,
+        salePrice: inputSalePrice,
         subtotal: subtotal,
       },
     ]);

@@ -7,8 +7,11 @@ const useGetSales = () => {
   useEffect(() => {
     const unsuscribe = db.collection("sales").onSnapshot((snapshot) => {
       setSales(
-        snapshot.docs.map((purchase) => {
-          return { ...purchase.data(), id: purchase.id };
+        snapshot.docs.map((sale) => {
+          return {
+            ...sale.data(),
+            id: sale.id,
+          };
         })
       );
     });

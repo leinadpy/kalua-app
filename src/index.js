@@ -17,13 +17,13 @@ import NewCategory from "./components/Category/NewCategory";
 import CategoryList from "./components/Category/CategoryList";
 import EditCategory from "./components/Category/EditCategory";
 
-import NewLine from "./components/Line/NewLine"
-import LineList from "./components/Line/LineList"
-import EditLine from "./components/Line/EditLine"
+import NewLine from "./components/Line/NewLine";
+import LineList from "./components/Line/LineList";
+import EditLine from "./components/Line/EditLine";
 
-import NewProduct from "./components/Product/NewProduct"
-import ProductList from "./components/Product/ProductList"
-import EditProduct from "./components/Product/EditProduct"
+import NewProduct from "./components/Product/NewProduct";
+import ProductList from "./components/Product/ProductList";
+import EditProduct from "./components/Product/EditProduct";
 import ProductListStock from "./components/Product/ProductListStock";
 
 import NewClient from "./components/Client/NewClient";
@@ -42,6 +42,8 @@ import NewRefund from "./components/Refund/NewRefund";
 import RefundList from "./components/Refund/RefundList";
 import EditRefund from "./components/Refund/EditRefund";
 
+import { StockProductProvider } from "./contextos/ProductStockContext";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 
 WebFont.load({
@@ -58,90 +60,92 @@ const Index = () => {
         <link rel="shortcut icon" href={favicon} type="image/x-icon" />
       </Helmet>
       <AuthProvider>
-        <Contenedor>
-          <BrowserRouter>
-            <Switch>
-              <Route path="/iniciar-sesion" component={InicioSesion} />
+        <StockProductProvider>
+          <Contenedor>
+            <BrowserRouter>
+              <Switch>
+                <Route path="/iniciar-sesion" component={InicioSesion} />
 
-              <RutaPrivada path="/categories/new-category">
-                <NewCategory />
-              </RutaPrivada>
-              <RutaPrivada path="/categories/edit/:id">
-                <EditCategory />
-              </RutaPrivada>
-              <RutaPrivada path="/categories">
-                <CategoryList />
-              </RutaPrivada>
+                <RutaPrivada path="/categories/new-category">
+                  <NewCategory />
+                </RutaPrivada>
+                <RutaPrivada path="/categories/edit/:id">
+                  <EditCategory />
+                </RutaPrivada>
+                <RutaPrivada path="/categories">
+                  <CategoryList />
+                </RutaPrivada>
 
-              <RutaPrivada path="/lines/new-line">
-                <NewLine />
-              </RutaPrivada>
-              <RutaPrivada path="/lines/edit/:id">
-                <EditLine />
-              </RutaPrivada>
-              <RutaPrivada path="/lines">
-                <LineList />
-              </RutaPrivada>
+                <RutaPrivada path="/lines/new-line">
+                  <NewLine />
+                </RutaPrivada>
+                <RutaPrivada path="/lines/edit/:id">
+                  <EditLine />
+                </RutaPrivada>
+                <RutaPrivada path="/lines">
+                  <LineList />
+                </RutaPrivada>
 
-              <RutaPrivada path="/products/new-product">
-                <NewProduct />
-              </RutaPrivada>
-              <RutaPrivada path="/products/edit/:id">
-                <EditProduct />
-              </RutaPrivada>
-              <RutaPrivada path="/products">
-                <ProductList />
-              </RutaPrivada>
-              <RutaPrivada path="/stock">
-                <ProductListStock />
-              </RutaPrivada>
+                <RutaPrivada path="/products/new-product">
+                  <NewProduct />
+                </RutaPrivada>
+                <RutaPrivada path="/products/edit/:id">
+                  <EditProduct />
+                </RutaPrivada>
+                <RutaPrivada path="/products">
+                  <ProductList />
+                </RutaPrivada>
+                <RutaPrivada path="/stock">
+                  <ProductListStock />
+                </RutaPrivada>
 
-              <RutaPrivada path="/clients/new-client">
-                <NewClient />
-              </RutaPrivada>
-              <RutaPrivada path="/clients/edit/:id">
-                <EditClient />
-              </RutaPrivada>
-              <RutaPrivada path="/clients">
-                <ClientList />
-              </RutaPrivada>
+                <RutaPrivada path="/clients/new-client">
+                  <NewClient />
+                </RutaPrivada>
+                <RutaPrivada path="/clients/edit/:id">
+                  <EditClient />
+                </RutaPrivada>
+                <RutaPrivada path="/clients">
+                  <ClientList />
+                </RutaPrivada>
 
-              <RutaPrivada path="/purchases/new-purchase">
-                <NewPurchase />
-              </RutaPrivada>
-              <RutaPrivada path="/purchases/edit/:id">
-                <EditPurchase />
-              </RutaPrivada>
-              <RutaPrivada path="/purchases">
-                <PurchaseList />
-              </RutaPrivada>
+                <RutaPrivada path="/purchases/new-purchase">
+                  <NewPurchase />
+                </RutaPrivada>
+                <RutaPrivada path="/purchases/edit/:id">
+                  <EditPurchase />
+                </RutaPrivada>
+                <RutaPrivada path="/purchases">
+                  <PurchaseList />
+                </RutaPrivada>
 
-              <RutaPrivada path="/sales/new-sale">
-                <NewSale />
-              </RutaPrivada>
-              <RutaPrivada path="/sales/edit/:id">
-                <EditSale />
-              </RutaPrivada>
-              <RutaPrivada path="/sales">
-                <SaleList />
-              </RutaPrivada>
+                <RutaPrivada path="/sales/new-sale">
+                  <NewSale />
+                </RutaPrivada>
+                <RutaPrivada path="/sales/edit/:id">
+                  <EditSale />
+                </RutaPrivada>
+                <RutaPrivada path="/sales">
+                  <SaleList />
+                </RutaPrivada>
 
-              <RutaPrivada path="/refunds/new-refund">
-                <NewRefund />
-              </RutaPrivada>
-              <RutaPrivada path="/refunds/edit/:id">
-                <EditRefund />
-              </RutaPrivada>
-              <RutaPrivada path="/refunds">
-                <RefundList />
-              </RutaPrivada>
+                <RutaPrivada path="/refunds/new-refund">
+                  <NewRefund />
+                </RutaPrivada>
+                <RutaPrivada path="/refunds/edit/:id">
+                  <EditRefund />
+                </RutaPrivada>
+                <RutaPrivada path="/refunds">
+                  <RefundList />
+                </RutaPrivada>
 
-              <RutaPrivada path="/">
-                <App />
-              </RutaPrivada>
-            </Switch>
-          </BrowserRouter>
-        </Contenedor>
+                <RutaPrivada path="/">
+                  <App />
+                </RutaPrivada>
+              </Switch>
+            </BrowserRouter>
+          </Contenedor>
+        </StockProductProvider>
       </AuthProvider>
 
       <Fondo />
