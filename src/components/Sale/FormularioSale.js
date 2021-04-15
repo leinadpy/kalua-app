@@ -144,6 +144,8 @@ const FormularioSale = ({ sale }) => {
           detailsSales={detailsSales}
           setDetailsSales={setDetailsSales}
           setTotal={setTotal}
+          setEstadoAlerta={setEstadoAlerta}
+          setAlerta={setAlerta}
         />
         <DetailSaleList
           detailsSales={detailsSales}
