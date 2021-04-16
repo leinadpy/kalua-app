@@ -30,6 +30,7 @@ const ClientList = () => {
           document: dato.document,
           phone: dato.phone,
           email: dato.email,
+          typeOfClient: dato.typeOfClient,
           abm: (
             <>
               <Boton to={`/clients/edit/${dato.id}`} small="true" as={Link}>
@@ -72,6 +73,12 @@ const ClientList = () => {
       {
         label: "E-mail",
         field: "email",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Tipo de Cliente",
+        field: "typeOfClient",
         sort: "asc",
         width: 150,
       },

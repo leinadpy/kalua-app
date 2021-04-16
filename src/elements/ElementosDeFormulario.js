@@ -18,14 +18,14 @@ const ContenedorFiltros = styled.div`
 `;
 
 const Formulario = styled.form`
-  padding: 0 2.5rem; /* 40px */
-  height: 70%;
+  padding: 0 1.5rem; /* 40px */
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
   input {
-    width: 50%;
+    width: 40%;
     text-align: center;
     padding: 1rem 0;
     font-family: "Work Sans", sans-serif;
@@ -53,14 +53,14 @@ const Input = styled.input`
 `;
 
 const InputChico = styled.input`
-  font-size: 1.5rem;
+  font-size: 1.0rem;
   border: none;
   border-bottom: 2px solid ${theme.grisClaro};
   outline: none;
 
   @media (max-width: 60rem) {
     /* 950px */
-    font-size: 1rem;
+    font-size: 0.5rem;
   }
 `;
 

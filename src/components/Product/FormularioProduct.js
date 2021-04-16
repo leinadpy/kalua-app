@@ -22,6 +22,8 @@ const FormularioProduct = ({ product }) => {
   const [selectLine, setSelectLine] = useState("");
   const [selectCategory, setSelectCategory] = useState("");
   const [inputBasicPrice, setInputBasicPrice] = useState("");
+  const [inputDistPrice, setInputDistPrice] = useState("");
+  const [inputPublicPrice, setInputPublicPrice] = useState("");
 
   const [estadoAlerta, setEstadoAlerta] = useState(false);
   const [alerta, setAlerta] = useState({});
@@ -36,6 +38,8 @@ const FormularioProduct = ({ product }) => {
       setSelectLine(product.data().line);
       setSelectCategory(product.data().category);
       setInputBasicPrice(product.data().basicPrice);
+      setInputDistPrice(product.data().distPrice);
+      setInputPublicPrice(product.data().publicPrice);
     } else {
       if (lines[0] !== undefined) {
         setSelectLine(lines[0].description);
@@ -63,6 +67,12 @@ const FormularioProduct = ({ product }) => {
       case "basicPrice":
         setInputBasicPrice(e.target.value);
         break;
+      case "distPrice":
+        setInputDistPrice(e.target.value);
+        break;
+      case "publicPrice":
+        setInputPublicPrice(e.target.value);
+        break;
 
       default:
         break;
@@ -87,6 +97,8 @@ const FormularioProduct = ({ product }) => {
           line: selectLine,
           category: selectCategory,
           basicPrice: inputBasicPrice,
+          distPrice: inputDistPrice,
+          publicPrice: inputPublicPrice,
         })
           .then(() => {
             history.push("/products");
@@ -101,11 +113,15 @@ const FormularioProduct = ({ product }) => {
           line: selectLine,
           category: selectCategory,
           basicPrice: inputBasicPrice,
+          distPrice: inputDistPrice,
+          publicPrice: inputPublicPrice,
         })
           .then(() => {
             setInputCode("");
             setInputDescription("");
             setInputBasicPrice("");
+            setInputDistPrice("");
+            setInputPublicPrice("");
             setEstadoAlerta(true);
             setAlerta({
               tipo: "exito",
@@ -157,6 +173,20 @@ const FormularioProduct = ({ product }) => {
           name="basicPrice"
           placeholder="Precio básico"
           value={inputBasicPrice}
+          onChange={handleChange}
+        />
+        <InputChico
+          type="text"
+          name="distPrice"
+          placeholder="Precio distribuidor"
+          value={inputDistPrice}
+          onChange={handleChange}
+        />
+        <InputChico
+          type="text"
+          name="publicPrice"
+          placeholder="Precio público"
+          value={inputPublicPrice}
           onChange={handleChange}
         />
         <ContenedorBoton>

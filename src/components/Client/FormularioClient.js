@@ -9,12 +9,19 @@ import Alerta from "../../elements/Alerta";
 import editClient from "../../firebase/clients/editClient";
 import addClient from "./../../firebase/clients/addClient";
 import { useHistory } from "react-router-dom";
+import Select from "./../Select";
+
+const typesOfClients = [
+  { id: "public", description: "Público" },
+  { id: "dist", description: "Distribuidor" },
+];
 
 const FormularioClient = ({ client }) => {
   const [inputName, setInputName] = useState("");
   const [inputDocument, setInputDocument] = useState("");
   const [inputPhone, setInputPhone] = useState("");
   const [inputEmail, setInputEmail] = useState("");
+  const [selectTypeOfClient, setSelectTypeOfClient] = useState("Público");
 
   const [estadoAlerta, setEstadoAlerta] = useState(false);
   const [alerta, setAlerta] = useState({});
@@ -64,6 +71,7 @@ const FormularioClient = ({ client }) => {
           document: inputDocument,
           phone: inputPhone,
           email: inputEmail,
+          typeOfClient: selectTypeOfClient,
         })
           .then(() => {
             history.push("/clients");
@@ -77,12 +85,14 @@ const FormularioClient = ({ client }) => {
           document: inputDocument,
           phone: inputPhone,
           email: inputEmail,
+          typeOfClient: selectTypeOfClient,
         })
           .then(() => {
             setInputName("");
             setInputDocument("");
             setInputPhone("");
             setInputEmail("");
+            setSelectTypeOfClient("Público");
             setEstadoAlerta(true);
             setAlerta({
               tipo: "exito",
@@ -136,6 +146,11 @@ const FormularioClient = ({ client }) => {
           placeholder="E-mail"
           value={inputEmail}
           onChange={handleChange}
+        />
+        <Select
+          estado={selectTypeOfClient}
+          setEstado={setSelectTypeOfClient}
+          data={typesOfClients}
         />
         <ContenedorBoton>
           <Boton as="button" primario type="submit">

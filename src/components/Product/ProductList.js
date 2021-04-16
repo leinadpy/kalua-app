@@ -13,6 +13,7 @@ import { ReactComponent as IconoBorrar } from "./../../imagenes/borrar.svg";
 import { MDBDataTable } from "mdbreact";
 import Boton from "./../../elements/Boton";
 import { Link } from "react-router-dom";
+import convertirAMoneda from "./../../funciones/convertirAMoneda";
 
 const ProductList = () => {
   const [products, setProducts] = useState("");
@@ -30,7 +31,9 @@ const ProductList = () => {
           description: dato.description,
           line: dato.line,
           category: dato.category,
-          basicPrice: dato.basicPrice,
+          basicPrice: convertirAMoneda(dato.basicPrice),
+          distPrice: convertirAMoneda(dato.distPrice),
+          publicPrice: convertirAMoneda(dato.publicPrice),
           abm: (
             <>
               <Boton to={`/products/edit/${dato.id}`} small="true" as={Link}>
@@ -79,6 +82,18 @@ const ProductList = () => {
       {
         label: "Precio base",
         field: "basicPrice",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Precio distribuidor",
+        field: "distPrice",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Precio público",
+        field: "publicPrice",
         sort: "asc",
         width: 150,
       },

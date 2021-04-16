@@ -8,10 +8,10 @@ const ContenedorSelect = styled.div`
   cursor: pointer;
   border-radius: 0.625rem; /* 10px */
   position: relative;
-  height: 5rem; /* 80px */
+  height: 3rem; /* 80px */
   width: 40%;
   padding: 10px 1.25rem; /* 20px */
-  font-size: 1.5rem; /* 24px */
+  font-size: 1.0rem; /* 24px */
   text-align: center;
   display: flex;
   align-items: center;
@@ -34,7 +34,7 @@ const OpcionSeleccionada = styled.div`
 const Opciones = styled.div`
   background: ${theme.grisClaro};
   position: absolute;
-  top: 4.00rem;
+  top: 3.50rem;
   left: 0;
   width: 100%;
   border-radius: 0.625rem; /* 10px */
@@ -44,7 +44,7 @@ const Opciones = styled.div`
 `;
 
 const Opcion = styled.div`
-  padding: 1.25rem; /* 20px */
+  padding: 1.0rem; /* 20px */
   display: flex;
   z-index: 200;
   svg {

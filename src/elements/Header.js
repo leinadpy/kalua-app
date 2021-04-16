@@ -16,7 +16,7 @@ const Header = styled.div`
 const Titulo = styled.h1`
   font-weight: normal;
   text-transform: uppercase;
-  font-size: 2.5rem; /* 40px */
+  font-size: 2.0rem; /* 40px */
 
   @media (max-width: 60rem) {
     /* 950px */
