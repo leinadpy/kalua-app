@@ -16,16 +16,21 @@ const Fila = styled.td`
 const DetailPurchaseList = ({
   detailsPurchases,
   setDetailsPurchases,
+  totalWithoutDeduction,
+  setTotalWithoutDeduction,
+  deduction,
   total,
-  setTotal,
 }) => {
   const onRemoveItem = (e, index) => {
     e.preventDefault();
-    setTotal((prevState) => prevState - detailsPurchases[index].subtotal);
+    setTotalWithoutDeduction(
+      (prevState) => prevState - detailsPurchases[index].subtotal
+    );
     const newDetailsPurchases = detailsPurchases.filter(
       (item, j) => index !== j
     );
     setDetailsPurchases(newDetailsPurchases);
+    console.log(detailsPurchases);
   };
 
   return (
@@ -59,9 +64,28 @@ const DetailPurchaseList = ({
             <Fila>{convertirAMoneda(detail.subtotal)}</Fila>
           </tr>
         ))}
-
         <tr>
-          <Fila>Total</Fila>
+          <Fila>Total sin descuento</Fila>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <Fila>{convertirAMoneda(totalWithoutDeduction)}</Fila>
+        </tr>
+        <tr>
+          <Fila>Descuento {deduction}%</Fila>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <Fila>{convertirAMoneda(totalWithoutDeduction - total)}</Fila>
+        </tr>
+        <tr>
+          <Fila>Total con descuento</Fila>
           <td></td>
           <td></td>
           <td></td>

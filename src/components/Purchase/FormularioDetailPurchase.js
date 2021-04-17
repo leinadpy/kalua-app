@@ -6,7 +6,7 @@ import useGetProducts from "./../../hooks/products/useGetProducts";
 const FormularioDetailPurchase = ({
   detailsPurchases,
   setDetailsPurchases,
-  setTotal,
+  setTotalWithoutDeduction,
 }) => {
   const [inputCode, setInputCode] = useState("");
   const [inputproduct, setInputProduct] = useState("");
@@ -56,7 +56,7 @@ const FormularioDetailPurchase = ({
 
   const calcularSubtotal = () => {
     const sub = inputQuantity * inputPurchPrice;
-    setTotal((prevState) => Number(prevState) + Number(sub));
+    setTotalWithoutDeduction((prevState) => Number(prevState) + Number(sub));
     return sub;
   };
 

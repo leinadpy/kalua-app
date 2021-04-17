@@ -11,11 +11,47 @@ import { getUnixTime } from "date-fns";
 import FormularioDetailSale from "./FormularioDetailSale";
 import DetailSaleList from "./DetailSaleList";
 import { fromUnixTime } from "date-fns";
+import useGetClients from "./../../hooks/clients/useGetClients";
+import styled from "styled-components";
+import theme from "./../../theme";
+
+const Opciones = styled.div`
+  background: ${theme.grisClaro};
+  position: absolute;
+  top: 4.5rem;
+  left: 0;
+  width: 100%;
+  border-radius: 0.625rem; /* 10px */
+  max-height: 18.75rem; /* 300px */
+  overflow-y: auto;
+  z-index: 200;
+`;
+
+const Opcion = styled.div`
+  padding: 1rem; /* 20px */
+  display: flex;
+  z-index: 200;
+  svg {
+    width: 28px;
+    height: auto;
+    margin-right: 1.25rem; /* 20px */
+  }
+  &:hover {
+    background: ${theme.grisClaro2};
+  }
+`;
 
 const FormularioSale = ({ sale }) => {
+  const [clients] = useGetClients();
+
+  const [dataList, setDataList] = useState([]);
+  const [dataMatch, setDataMatch] = useState([]);
+
   const [inputInvoiceNumber, setInputInvoiceNumber] = useState("");
   const [inputClient, setInputClient] = useState("");
+  const [typeOfClient, setTypeOfClient] = useState("");
   const [dateSale, setDateSale] = useState(new Date());
+  const [radiusTypeOfSale, setRadiusTypeOfSale] = useState("Crédito");
   const [total, setTotal] = useState(0);
   const [detailsSales, setDetailsSales] = useState([]);
 
@@ -24,16 +60,31 @@ const FormularioSale = ({ sale }) => {
   const history = useHistory();
 
   useEffect(() => {
+    setDataList(clients);
     // Comprobamos si ya hay alguna compra.
     // De ser así establecemos todo el state con los valores de la compra.
     if (sale) {
       setInputInvoiceNumber(sale.data().invoiceNumber);
       setInputClient(sale.data().client);
+      setTypeOfClient(sale.data().typeOfClient);
       setDateSale(fromUnixTime(sale.data().dateSale));
+      setRadiusTypeOfSale(sale.data().typeOfSale);
       setTotal(sale.data().total);
       setDetailsSales(sale.data().detailsSales);
     }
-  }, [sale]);
+  }, [sale, clients]);
+
+  const searchData = (text) => {
+    if (!text) {
+      setDataMatch([]);
+    } else {
+      let matches = dataList.filter((data) => {
+        const regex = new RegExp(`${text}`, "gi");
+        return data.name.match(regex);
+      });
+      setDataMatch(matches);
+    }
+  };
 
   const handleChange = (e) => {
     switch (e.target.name) {
@@ -42,10 +93,20 @@ const FormularioSale = ({ sale }) => {
         break;
       case "client":
         setInputClient(e.target.value);
+        searchData(e.target.value);
+        break;
+      case "typeOfSale":
+        setRadiusTypeOfSale(e.target.value);
         break;
       default:
         break;
     }
+  };
+
+  const handleClick = (e) => {
+    setInputClient(e.currentTarget.dataset.valor);
+    setTypeOfClient(e.currentTarget.dataset.type);
+    setDataMatch([]);
   };
 
   const handleSubmit = async (e) => {
@@ -63,7 +124,9 @@ const FormularioSale = ({ sale }) => {
           id: sale.id,
           invoiceNumber: inputInvoiceNumber,
           client: inputClient,
+          typeOfClient: typeOfClient,
           dateSale: getUnixTime(dateSale),
+          typeOfSale: radiusTypeOfSale,
           total: total,
           detailsSales: detailsSales,
         })
@@ -77,7 +140,9 @@ const FormularioSale = ({ sale }) => {
         addSale({
           invoiceNumber: inputInvoiceNumber,
           client: inputClient,
+          typeOfClient: typeOfClient,
           dateSale: getUnixTime(dateSale),
+          typeOfSale: radiusTypeOfSale,
           total: total,
           detailsSales: detailsSales,
         })
@@ -134,10 +199,45 @@ const FormularioSale = ({ sale }) => {
               value={inputClient}
               onChange={handleChange}
             />
+            {dataMatch && (
+              <Opciones>
+                {dataMatch.map((item, index) => (
+                  <Opcion
+                    key={index}
+                    data-valor={item.name}
+                    data-type={item.typeOfClient}
+                    onClick={handleClick}
+                  >
+                    {item.name}
+                  </Opcion>
+                ))}
+              </Opciones>
+            )}
           </Form.Group>
           <Form.Group as={Col} controlId="formGriddateSale">
             <Form.Label>Fecha de compra</Form.Label>
             <DatePicker fecha={dateSale} setFecha={setDateSale} />
+          </Form.Group>
+        </Form.Row>
+        <Form.Row>
+          <Form.Group as={Col} controlId="formGridTypeOfSale">
+            <Form.Label>Tipo de Venta</Form.Label>
+            <Form.Check
+              label="Crédito"
+              type="radio"
+              name="typeOfSale"
+              value="Crédito"
+              checked={radiusTypeOfSale === "Crédito"}
+              onChange={handleChange}
+            />
+            <Form.Check
+              label="Contado"
+              type="radio"
+              name="typeOfSale"
+              value="Contado"
+              checked={radiusTypeOfSale === "Contado"}
+              onChange={handleChange}
+            />
           </Form.Group>
         </Form.Row>
         <FormularioDetailSale
@@ -146,6 +246,7 @@ const FormularioSale = ({ sale }) => {
           setTotal={setTotal}
           setEstadoAlerta={setEstadoAlerta}
           setAlerta={setAlerta}
+          typeOfClient={typeOfClient}
         />
         <DetailSaleList
           detailsSales={detailsSales}

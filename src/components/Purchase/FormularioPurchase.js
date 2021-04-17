@@ -10,13 +10,16 @@ import DatePicker from "./../DatePicker";
 import { getUnixTime } from "date-fns";
 import FormularioDetailPurchase from "./FormularioDetailPurchase";
 import DetailPurchaseList from "./DetailPurchaseList";
-import {fromUnixTime} from "date-fns"
+import { fromUnixTime } from "date-fns";
 
 const FormularioPurchase = ({ purchase }) => {
   const [inputInvoiceNumber, setInputInvoiceNumber] = useState("");
   const [datePurchase, setDatePurchase] = useState(new Date());
+  const [inputDeduction, setInputDeduction] = useState(0);
   const [total, setTotal] = useState(0);
   const [detailsPurchases, setDetailsPurchases] = useState([]);
+
+  const [totalWithoutDeduction, setTotalWithoutDeduction] = useState(0);
 
   const [estadoAlerta, setEstadoAlerta] = useState(false);
   const [alerta, setAlerta] = useState({});
@@ -28,15 +31,26 @@ const FormularioPurchase = ({ purchase }) => {
     if (purchase) {
       setInputInvoiceNumber(purchase.data().invoiceNumber);
       setDatePurchase(fromUnixTime(purchase.data().datePurchase));
+      setInputDeduction(purchase.data().deduction);
       setTotal(purchase.data().total);
+      setTotalWithoutDeduction(purchase.data().totalWithoutDeduction);
       setDetailsPurchases(purchase.data().detailsPurchases);
     }
   }, [purchase]);
+
+  useEffect(() => {
+    setTotal(
+      totalWithoutDeduction - (inputDeduction * totalWithoutDeduction) / 100
+    );
+  }, [totalWithoutDeduction, inputDeduction]);
 
   const handleChange = (e) => {
     switch (e.target.name) {
       case "invoiceNumber":
         setInputInvoiceNumber(e.target.value);
+        break;
+      case "deduction":
+        setInputDeduction(e.target.value);
         break;
       default:
         break;
@@ -54,7 +68,9 @@ const FormularioPurchase = ({ purchase }) => {
           id: purchase.id,
           invoiceNumber: inputInvoiceNumber,
           datePurchase: getUnixTime(datePurchase),
+          deduction: inputDeduction,
           total: total,
+          totalWithoutDeduction: totalWithoutDeduction,
           detailsPurchases: detailsPurchases,
         })
           .then(() => {
@@ -67,12 +83,15 @@ const FormularioPurchase = ({ purchase }) => {
         addPurchase({
           invoiceNumber: inputInvoiceNumber,
           datePurchase: getUnixTime(datePurchase),
+          deduction: inputDeduction,
           total: total,
+          totalWithoutDeduction: totalWithoutDeduction,
           detailsPurchases: detailsPurchases,
         })
           .then(() => {
             setInputInvoiceNumber("");
             setDatePurchase(new Date());
+            setInputDeduction(0);
             setTotal("");
             setDetailsPurchases([]);
 
@@ -117,17 +136,29 @@ const FormularioPurchase = ({ purchase }) => {
             <Form.Label>Fecha de compra</Form.Label>
             <DatePicker fecha={datePurchase} setFecha={setDatePurchase} />
           </Form.Group>
+          <Form.Group as={Col} controlId="formGridDeduction">
+            <Form.Label>Descuento</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="% de descuento"
+              name="deduction"
+              value={inputDeduction}
+              onChange={handleChange}
+            />
+          </Form.Group>
         </Form.Row>
         <FormularioDetailPurchase
           detailsPurchases={detailsPurchases}
           setDetailsPurchases={setDetailsPurchases}
-          setTotal={setTotal}
+          setTotalWithoutDeduction={setTotalWithoutDeduction}
         />
         <DetailPurchaseList
           detailsPurchases={detailsPurchases}
           setDetailsPurchases={setDetailsPurchases}
+          totalWithoutDeduction={totalWithoutDeduction}
+          setTotalWithoutDeduction={setTotalWithoutDeduction}
+          deduction={inputDeduction}
           total={total}
-          setTotal={setTotal}
         />
         <ContenedorBoton>
           <Boton as="button" primario type="submit">

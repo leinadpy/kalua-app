@@ -4,7 +4,9 @@ const editSale = ({
   id,
   invoiceNumber,
   client,
+  typeOfClient,
   dateSale,
+  typeOfSale,
   total,
   detailsSales,
 }) => {
@@ -14,7 +16,9 @@ const editSale = ({
     .update({
       invoiceNumber: invoiceNumber,
       client: client,
+      typeOfClient: typeOfClient,
       dateSale: dateSale,
+      typeOfSale: typeOfSale,
       total: Number(total),
       detailsSales: detailsSales,
     });

@@ -4,7 +4,9 @@ const editPurchase = ({
   id,
   invoiceNumber,
   datePurchase,
+  deduction,
   total,
+  totalWithoutDeduction,
   detailsPurchases,
 }) => {
   return db
@@ -13,7 +15,9 @@ const editPurchase = ({
     .update({
       invoiceNumber: invoiceNumber,
       datePurchase: datePurchase,
+      deduction: deduction,
       total: Number(total),
+      totalWithoutDeduction: totalWithoutDeduction,
       detailsPurchases: detailsPurchases,
     });
 };

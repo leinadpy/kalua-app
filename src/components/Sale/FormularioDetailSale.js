@@ -10,6 +10,7 @@ const FormularioDetailSale = ({
   setTotal,
   setEstadoAlerta,
   setAlerta,
+  typeOfClient
 }) => {
   const [inputCode, setInputCode] = useState("");
   const [inputproduct, setInputProduct] = useState("");
@@ -56,6 +57,7 @@ const FormularioDetailSale = ({
       products.forEach((product) => {
         if (product.code === inputCode) {
           setInputProduct(product.description);
+          setInputSalePrice(typeOfClient==="Distribuidor" ? product.distPrice : product.publicPrice)
         }
       });
     }
@@ -195,7 +197,7 @@ const FormularioDetailSale = ({
           />
         </Form.Group>
         <Form.Group as={Col} controlId="formGridSalePrice">
-          <Form.Label>Precio Venta</Form.Label>
+          <Form.Label>Precio Venta {typeOfClient} </Form.Label>
           <Form.Control
             type="text"
             placeholder="Precio Venta"
