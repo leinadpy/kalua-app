@@ -33,10 +33,12 @@ import EditClient from "./components/Client/EditClient";
 import NewPurchase from "./components/Purchase/NewPurchase";
 import PurchaseList from "./components/Purchase/PurchaseList";
 import EditPurchase from "./components/Purchase/EditPurchase";
+import ReportPurchase from "./components/Purchase/ReportPurchase";
 
 import NewSale from "./components/Sale/NewSale";
 import SaleList from "./components/Sale/SaleList";
 import EditSale from "./components/Sale/EditSale";
+import ReportSale from "./components/Sale/ReportSale";
 
 import NewRefund from "./components/Refund/NewRefund";
 import RefundList from "./components/Refund/RefundList";
@@ -115,6 +117,9 @@ const Index = () => {
                 <RutaPrivada path="/purchases/edit/:id">
                   <EditPurchase />
                 </RutaPrivada>
+                <RutaPrivada path="/purchasesreports">
+                  <ReportPurchase />
+                </RutaPrivada>
                 <RutaPrivada path="/purchases">
                   <PurchaseList />
                 </RutaPrivada>
@@ -124,6 +129,9 @@ const Index = () => {
                 </RutaPrivada>
                 <RutaPrivada path="/sales/edit/:id">
                   <EditSale />
+                </RutaPrivada>
+                <RutaPrivada path="/salesreports">
+                  <ReportSale />
                 </RutaPrivada>
                 <RutaPrivada path="/sales">
                   <SaleList />

@@ -54,6 +54,7 @@ const ContenedorInput = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 100;
   }
 
   @media (max-width: 60rem) {
@@ -70,7 +71,7 @@ const DatePicker = ({ fecha, setFecha }) => {
       <DayPickerInput
         value={fecha}
         onDayChange={(day) => setFecha(day)}
-        format="dd 'de' MMMM 'de' yyyy"
+        format="dd/MM/yyyy"
         formatDate={formatDate}
         parseDate={parseDate}
         dayPickerProps={{

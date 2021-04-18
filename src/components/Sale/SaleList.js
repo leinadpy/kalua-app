@@ -30,7 +30,9 @@ const SaleList = () => {
         datoFormateado = {
           invoiceNumber: dato.invoiceNumber,
           client: dato.client,
+          typeOfClient: dato.typeOfClient,
           dateSale: formatearFecha(dato.dateSale, "dd/MM/yyyy"),
+          typeOfSale: dato.typeOfSale,
           total: convertirAMoneda(dato.total),
           abm: (
             <>
@@ -66,8 +68,20 @@ const SaleList = () => {
         width: 150,
       },
       {
+        label: "Tipo Cliente",
+        field: "typeOfClient",
+        sort: "asc",
+        width: 150,
+      },
+      {
         label: "Fecha venta",
         field: "dateSale",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Tipo venta",
+        field: "typeOfSale",
         sort: "asc",
         width: 150,
       },

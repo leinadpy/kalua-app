@@ -92,7 +92,7 @@ const FormularioPurchase = ({ purchase }) => {
             setInputInvoiceNumber("");
             setDatePurchase(new Date());
             setInputDeduction(0);
-            setTotal("");
+            setTotalWithoutDeduction(0);
             setDetailsPurchases([]);
 
             setEstadoAlerta(true);
