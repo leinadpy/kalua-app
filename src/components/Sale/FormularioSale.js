@@ -54,6 +54,7 @@ const FormularioSale = ({ sale }) => {
   const [radiusTypeOfSale, setRadiusTypeOfSale] = useState("Crédito");
   const [total, setTotal] = useState(0);
   const [detailsSales, setDetailsSales] = useState([]);
+  const [paidUp, setPaidUp] = useState(0);
 
   const [estadoAlerta, setEstadoAlerta] = useState(false);
   const [alerta, setAlerta] = useState({});
@@ -71,8 +72,17 @@ const FormularioSale = ({ sale }) => {
       setRadiusTypeOfSale(sale.data().typeOfSale);
       setTotal(sale.data().total);
       setDetailsSales(sale.data().detailsSales);
+      setPaidUp(sale.data().paidUp);
     }
   }, [sale, clients]);
+
+  useEffect(() => {
+    if (radiusTypeOfSale === "Crédito") {
+      setPaidUp(total);
+    } else {
+      setPaidUp(0);
+    }
+  }, [radiusTypeOfSale, setPaidUp, total]);
 
   const searchData = (text) => {
     if (!text) {
@@ -113,12 +123,12 @@ const FormularioSale = ({ sale }) => {
     e.preventDefault();
     setEstadoAlerta(false);
     setAlerta({});
-    // Comprobamos que haya una venta
     if (
       inputInvoiceNumber !== "" &&
       inputClient !== "" &&
       detailsSales.length !== 0
     ) {
+      // Comprobamos que haya una venta
       if (sale) {
         editSale({
           id: sale.id,
@@ -129,6 +139,7 @@ const FormularioSale = ({ sale }) => {
           typeOfSale: radiusTypeOfSale,
           total: total,
           detailsSales: detailsSales,
+          paidUp: paidUp,
         })
           .then(() => {
             history.push("/sales");
@@ -145,13 +156,15 @@ const FormularioSale = ({ sale }) => {
           typeOfSale: radiusTypeOfSale,
           total: total,
           detailsSales: detailsSales,
+          paidUp: paidUp,
         })
           .then(() => {
             setInputInvoiceNumber("");
             setInputClient("");
             setDateSale(new Date());
-            setTotal("");
+            setTotal(0);
             setDetailsSales([]);
+            setPaidUp(0);
 
             setEstadoAlerta(true);
             setAlerta({

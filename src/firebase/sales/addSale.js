@@ -8,6 +8,7 @@ const addSale = ({
   typeOfSale,
   total,
   detailsSales,
+  paidUp,
 }) => {
   return db.collection("sales").add({
     invoiceNumber: invoiceNumber,
@@ -17,6 +18,7 @@ const addSale = ({
     typeOfSale: typeOfSale,
     total: Number(total),
     detailsSales: detailsSales,
+    paidUp: paidUp,
   });
 };
 

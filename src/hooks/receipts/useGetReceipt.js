@@ -2,24 +2,24 @@ import { useState, useEffect } from "react";
 import { db } from "./../../firebase/firebaseConfig";
 import { useHistory } from "react-router-dom";
 
-const useGetRefund = (id) => {
+const useGetReceipt = (id) => {
   const history = useHistory();
-  const [refund, setRefund] = useState("");
+  const [receipt, setReceipt] = useState("");
 
   useEffect(() => {
-    db.collection("refunds")
+    db.collection("receipts")
       .doc(id)
       .get()
       .then((doc) => {
         if (doc.exists) {
-          setRefund(doc);
+          setReceipt(doc);
         } else {
-          history.push("/refunds");
+          history.push("/receipts");
         }
       });
   }, [id, history]);
 
-  return [refund];
+  return [receipt];
 };
 
-export default useGetRefund;
+export default useGetReceipt;

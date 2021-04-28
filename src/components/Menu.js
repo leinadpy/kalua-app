@@ -63,14 +63,28 @@ const Menu = () => {
             <NavDropdown.Item as={Link} to="/sales">
               Lista de ventas
             </NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item as={Link} to="/receipts/new-receipt">
+              Nuevo recibo
+            </NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="/receipts">
+              Lista de recibos
+            </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Reportes" id="basic-nav-dropdown">
             <NavDropdown.Item as={Link} to="/purchasesreports">
-              Reporte de compras
+              Compras por fechas
             </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item as={Link} to="/salesreports">
-              Reporte de ventas
+              Ventas por fechas
+            </NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="/salespendingcollection">
+              Ventas pendientes de cobro
+            </NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item as={Link} to="/receiptsreports">
+              Recibos por fechas
             </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item as={Link} to="/stock">

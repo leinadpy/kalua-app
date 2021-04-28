@@ -9,6 +9,7 @@ const editSale = ({
   typeOfSale,
   total,
   detailsSales,
+  paidUp
 }) => {
   return db
     .collection("sales")
@@ -21,6 +22,7 @@ const editSale = ({
       typeOfSale: typeOfSale,
       total: Number(total),
       detailsSales: detailsSales,
+      paidUp: paidUp
     });
 };
 
