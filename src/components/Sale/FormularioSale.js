@@ -77,7 +77,7 @@ const FormularioSale = ({ sale }) => {
   }, [sale, clients]);
 
   useEffect(() => {
-    if (radiusTypeOfSale === "Crédito") {
+    if (radiusTypeOfSale !== "Crédito") {
       setPaidUp(total);
     } else {
       setPaidUp(0);

@@ -174,6 +174,31 @@ const BotonAccionSmall = styled.button`
   }
 `;
 
+const BotonAccionSmallForm = styled.button`
+  background: #343a40;
+  width: auto;
+  margin-left: 0;
+  margin-top: 0;
+  border: none;
+  border-radius: 0.625rem; /* 10px */
+  color: #fff;
+  font-family: "Work Sans", sans-serif;
+  height: 2.5rem;
+  padding: 1.25rem 1.87rem; /* 20px 30px */
+  font-size: 1.25rem; /* 20px */
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  outline: none;
+
+  &:hover {
+    background: ${theme.grisClaro2};
+  }
+`;
+
 const ContenedorSubtitulo = styled.div`
   height: 100%;
   display: flex;
@@ -230,6 +255,7 @@ export {
   ContenedorBotones,
   BotonAccion,
   BotonAccionSmall,
+  BotonAccionSmallForm,
   BotonCargarMas,
   ContenedorBotonCentral,
   ContenedorSubtitulo,

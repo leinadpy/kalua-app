@@ -40,6 +40,10 @@ import SaleList from "./components/Sale/SaleList";
 import EditSale from "./components/Sale/EditSale";
 import ReportSale from "./components/Sale/ReportSale";
 
+import NewReceipt from "./components/Receipt/NewReceipt";
+import ReceiptList from "./components/Receipt/ReceiptList";
+import EditReceipt from "./components/Receipt/EditReceipt";
+
 import { StockProductProvider } from "./contextos/ProductStockContext";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -131,6 +135,19 @@ const Index = () => {
                 </RutaPrivada>
                 <RutaPrivada path="/sales">
                   <SaleList />
+                </RutaPrivada>
+
+                <RutaPrivada path="/receipts/new-receipt">
+                  <NewReceipt />
+                </RutaPrivada>
+                <RutaPrivada path="/receipts/edit/:id">
+                  <EditReceipt />
+                </RutaPrivada>
+                {/* <RutaPrivada path="/receiptsreports">
+                  <ReportReceipt />
+                </RutaPrivada> */}
+                <RutaPrivada path="/receipts">
+                  <ReceiptList />
                 </RutaPrivada>
 
                 <RutaPrivada path="/">
