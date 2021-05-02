@@ -91,7 +91,7 @@ const FormularioDetailSale = ({
 
   const calcularSubtotal = () => {
     const sub = inputQuantity * inputSalePrice;
-    setTotal((prevState) => prevState + sub);
+    setTotal((prevState) => Number(prevState) + Number(sub));
     return sub;
   };
 
