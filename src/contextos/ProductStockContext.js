@@ -96,7 +96,50 @@ const StockProductProvider = ({ children }) => {
         quantity: resultante,
       });
     });
-    setProductStock(resultArray);
+    const resultArrayWithPurchases = [];
+    let indexProduct = 0;
+    let bandera = false;
+    resultArray.forEach((product) => {
+      purchases.forEach((purchase) => {
+        purchase.detailsPurchases.forEach((detail) => {
+          if (product.quantity > 0) {
+            if (
+              product.code === detail.code &&
+              product.sizeCode === detail.sizeCode &&
+              product.colorCode === detail.colorCode
+            ) {
+              if (!bandera) {
+                resultArrayWithPurchases[indexProduct] = {
+                  ...product,
+                  idPurchase: [purchase.id],
+                  quantityOfPurchase: [detail.quantity],
+                  resultQuantityOfPurchase: detail.quantity,
+                };
+                bandera = true;
+              } else if (
+                resultArrayWithPurchases[indexProduct]
+                  .resultQuantityOfPurchase < product.quantity
+              ) {
+                resultArrayWithPurchases[indexProduct].idPurchase.push(
+                  purchase.id
+                );
+                resultArrayWithPurchases[indexProduct].quantityOfPurchase.push(
+                  detail.quantity
+                );
+                resultArrayWithPurchases[
+                  indexProduct
+                ].resultQuantityOfPurchase += detail.quantity;
+              }
+            }
+          }
+        });
+      });
+      indexProduct += 1;
+      bandera = false;
+    });
+    // console.log(resultArrayWithPurchases);
+    // setProductStock(resultArray);
+    setProductStock(resultArrayWithPurchases)
   }, [purchases, sales]);
 
   return (

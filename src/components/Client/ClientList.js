@@ -25,30 +25,37 @@ const ClientList = () => {
     var datoFormateado = {};
     const formatData = (datos) => {
       datos.forEach((dato) => {
-        datoFormateado = {
-          name: dato.name,
-          document: dato.document,
-          phone: dato.phone,
-          email: dato.email,
-          typeOfClient: dato.typeOfClient,
-          abm: (
-            <>
-              <Boton to={`/clients/edit/${dato.id}`} small="true" as={Link}>
-                <IconoEditar />
-              </Boton>
-              <Boton small="true" onClick={() => deleteClient(dato.id)}>
-                <IconoBorrar />
-              </Boton>
-            </>
-          ),
-        };
-        datosFormateados.push(datoFormateado);
+        if (dato !== undefined) {
+          datoFormateado = {
+            name: dato.name,
+            document: dato.document,
+            phone: dato.phone,
+            email: dato.email,
+            typeOfClient: dato.typeOfClient,
+            abm: (
+              <>
+                <Boton to={`/clients/edit/${dato.id}`} small="true" as={Link}>
+                  <IconoEditar />
+                </Boton>
+                <Boton small="true" onClick={() => deleteClient(dato.id)}>
+                  <IconoBorrar />
+                </Boton>
+              </>
+            ),
+          };
+          datosFormateados.push(datoFormateado);
+        }
       });
     };
     formatData(dataClients);
     setClients(datosFormateados);
-    setCargando(false);
   }, [dataClients]);
+
+  useEffect(() => {
+    if (clients.length !== 0) {
+      setCargando(false);
+    }
+  }, [clients]);
 
   const data = {
     columns: [
@@ -104,21 +111,12 @@ const ClientList = () => {
         </ContenedorHeader>
       </Header>
 
-      {!cargando ? (
-        dataClients.length !== 0 ? (
-          <ContenedorTabla>
-            <MDBDataTable striped bordered small data={data} />
-          </ContenedorTabla>
-        ) : (
-          <h3>No hay clientes para mostrar</h3>
-        )
+      {!cargando && clients.length !== 0 ? (
+        <ContenedorTabla>
+          <MDBDataTable striped bordered small data={data} />
+        </ContenedorTabla>
       ) : (
-        <div
-          className="spinner-grow text-primary w-50 text-center mx-auto p-3 mt-2 h-100"
-          role="status"
-        >
-          <span className="sr-only">Loading...</span>
-        </div>
+        <h3>No hay clientes para mostrar</h3>
       )}
     </>
   );

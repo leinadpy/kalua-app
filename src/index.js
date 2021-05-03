@@ -25,6 +25,7 @@ import NewProduct from "./components/Product/NewProduct";
 import ProductList from "./components/Product/ProductList";
 import EditProduct from "./components/Product/EditProduct";
 import ProductListStock from "./components/Product/ProductListStock";
+import ProductListStockM from "./components/Product/ProductListStockM";
 
 import NewClient from "./components/Client/NewClient";
 import ClientList from "./components/Client/ClientList";
@@ -99,6 +100,9 @@ const Index = () => {
                 </RutaPrivada>
                 <RutaPrivada path="/stock">
                   <ProductListStock />
+                </RutaPrivada>
+                <RutaPrivada path="/stockmodif">
+                  <ProductListStockM />
                 </RutaPrivada>
 
                 <RutaPrivada path="/clients/new-client">
