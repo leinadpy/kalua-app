@@ -12,6 +12,7 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import Boton from "./../../elements/Boton";
 import { Link } from "react-router-dom";
+import formatearFecha from "./../../funciones/formatearFecha";
 
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
@@ -61,12 +62,22 @@ const ProductListStockM = () => {
       <div>
         {productsStock[row.id].idPurchase &&
           productsStock[row.id].idPurchase.map((purchase) => (
-            <p key={row.id}>
+            <p key={purchase.id}>
+              <span style={{ marginRight: "50px" }}>
+                Factura Nº: {purchase.invoiceNumber}
+              </span>
+              <span style={{ marginRight: "50px" }}>
+                Fecha compra:{" "}
+                {formatearFecha(purchase.datePurchase, "dd/MM/yyyy")}
+              </span>
+              <span style={{ marginRight: "50px" }}>
+                Cantidad comprada: {purchase.quantityOfPurchase}
+              </span>
               <Boton
-                to={`/purchases/edit/${purchase}`}
+                to={`/purchases/edit/${purchase.id}`}
                 small="true"
                 as={Link}
-                style={{ textDecoration: "none" }}
+                style={{ textDecoration: "none", color: "white" }}
               >
                 Ir a compra
               </Boton>
@@ -100,15 +111,14 @@ const ProductListStockM = () => {
             >
               {(props) => (
                 <div>
-                  <h3>Input something at below input field:</h3>
-                  {/* <SearchBar
+                  <h3>Búsqueda:</h3>
+                  <SearchBar
                     {...props.searchProps}
                     className="custome-search-field"
                     style={{ color: "black" }}
                     delay={1000}
-                    placeholder="Search Something!!!"
-                  /> */}
-                  <SearchBar {...props.searchProps} />
+                    placeholder="Buscar"
+                  />
                   <hr />
                   <BootstrapTable
                     {...props.baseProps}

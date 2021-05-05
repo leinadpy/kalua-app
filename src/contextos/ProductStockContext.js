@@ -98,7 +98,16 @@ const StockProductProvider = ({ children }) => {
     });
     const resultArrayWithPurchases = [];
     let indexProduct = 0;
+    let arrayIdPurchases = [];
+    let sumaQuantity = 0;
     let bandera = false;
+    purchases.sort((a, b) =>
+      a.datePurchase > b.datePurchase
+        ? -1
+        : b.datePurchase > a.datePurchase
+        ? 1
+        : 0
+    );
     resultArray.forEach((product) => {
       purchases.forEach((purchase) => {
         purchase.detailsPurchases.forEach((detail) => {
@@ -108,38 +117,40 @@ const StockProductProvider = ({ children }) => {
               product.sizeCode === detail.sizeCode &&
               product.colorCode === detail.colorCode
             ) {
+              sumaQuantity += Number(detail.quantity);
               if (!bandera) {
-                resultArrayWithPurchases[indexProduct] = {
-                  ...product,
-                  idPurchase: [purchase.id],
-                  quantityOfPurchase: [detail.quantity],
-                  resultQuantityOfPurchase: detail.quantity,
-                };
+                arrayIdPurchases.push({
+                  id: purchase.id,
+                  invoiceNumber: purchase.invoiceNumber,
+                  datePurchase: purchase.datePurchase,
+                  quantityOfPurchase: detail.quantity,
+                });
                 bandera = true;
-              } else if (
-                resultArrayWithPurchases[indexProduct]
-                  .resultQuantityOfPurchase < product.quantity
-              ) {
-                resultArrayWithPurchases[indexProduct].idPurchase.push(
-                  purchase.id
-                );
-                resultArrayWithPurchases[indexProduct].quantityOfPurchase.push(
-                  detail.quantity
-                );
-                resultArrayWithPurchases[
-                  indexProduct
-                ].resultQuantityOfPurchase += detail.quantity;
+              } else {
+                if (sumaQuantity <= product.quantity) {
+                  arrayIdPurchases.push({
+                    id: purchase.id,
+                    invoiceNumber: purchase.invoiceNumber,
+                    datePurchase: purchase.datePurchase,
+                    quantityOfPurchase: detail.quantity,
+                  });
+                }
               }
             }
           }
         });
       });
+      resultArrayWithPurchases[indexProduct] = {
+        ...product,
+        idPurchase: arrayIdPurchases,
+        resultQuantityOfPurchase: sumaQuantity,
+      };
+      arrayIdPurchases = [];
+      sumaQuantity = 0;
       indexProduct += 1;
       bandera = false;
     });
-    // console.log(resultArrayWithPurchases);
-    // setProductStock(resultArray);
-    setProductStock(resultArrayWithPurchases)
+    setProductStock(resultArrayWithPurchases);
   }, [purchases, sales]);
 
   return (
