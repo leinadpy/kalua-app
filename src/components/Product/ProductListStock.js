@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Header, Titulo, ContenedorHeader } from "./../../elements/Header";
 import { Helmet } from "react-helmet";
-import {useStockProduct} from "./../../contextos/ProductStockContext";
+import { useStockProduct } from "./../../contextos/ProductStockContext";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 import ContenedorTabla from "./../../elements/ContenedorTabla";
 import Menu from "./../Menu";
-import { MDBDataTable } from "mdbreact";
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import Boton from "./../../elements/Boton";
+import { Link } from "react-router-dom";
+import formatearFecha from "./../../funciones/formatearFecha";
 
-const ProductListStock = () => {
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
+import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css";
+
+const { SearchBar } = Search;
+
+const ProductListStockM = () => {
   const [productsStock, setProductsStock] = useState("");
   const [cargando, setCargando] = useState(true);
 
@@ -19,13 +30,15 @@ const ProductListStock = () => {
     var datosFormateados = [];
     var datoFormateado = {};
     const formatData = (datos) => {
-      datos.forEach((dato) => {
+      datos.forEach((dato, index) => {
         datoFormateado = {
+          id: index,
           code: dato.code,
           product: dato.product,
           sizeCode: dato.sizeCode,
           colorCode: dato.colorCode,
           quantity: dato.quantity,
+          idPurchase: dato.idPurchase,
         };
         datosFormateados.push(datoFormateado);
       });
@@ -35,40 +48,44 @@ const ProductListStock = () => {
     setCargando(false);
   }, [dataProductsStock]);
 
-  const data = {
-    columns: [
-      {
-        label: "Código",
-        field: "code",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Descripción",
-        field: "product",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Tamaño",
-        field: "sizeCode",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Color",
-        field: "colorCode",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Cantidad",
-        field: "quantity",
-        sort: "asc",
-        width: 150,
-      }
-    ],
-    rows: productsStock,
+  const dataProducts = productsStock;
+  const columns = [
+    { dataField: "code", text: "Código" },
+    { dataField: "product", text: "Descripción" },
+    { dataField: "sizeCode", text: "Tamaño" },
+    { dataField: "colorCode", text: "Color" },
+    { dataField: "quantity", text: "Cantidad" },
+  ];
+
+  const expandRow = {
+    renderer: (row) => (
+      <div>
+        {productsStock[row.id].idPurchase &&
+          productsStock[row.id].idPurchase.map((purchase) => (
+            <p key={purchase.id}>
+              <span style={{ marginRight: "50px" }}>
+                Factura Nº: {purchase.invoiceNumber}
+              </span>
+              <span style={{ marginRight: "50px" }}>
+                Fecha compra:{" "}
+                {formatearFecha(purchase.datePurchase, "dd/MM/yyyy")}
+              </span>
+              <span style={{ marginRight: "50px" }}>
+                Cantidad comprada: {purchase.quantityOfPurchase}
+              </span>
+              <Boton
+                to={`/purchases/edit/${purchase.id}`}
+                small="true"
+                as={Link}
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                Ir a compra
+              </Boton>
+            </p>
+          ))}
+      </div>
+    ),
+    showExpandColumn: true,
   };
 
   return (
@@ -86,7 +103,33 @@ const ProductListStock = () => {
       {!cargando ? (
         dataProductsStock.length !== 0 ? (
           <ContenedorTabla>
-            <MDBDataTable striped bordered small data={data} />
+            <ToolkitProvider
+              keyField="id"
+              data={dataProducts}
+              columns={columns}
+              search
+            >
+              {(props) => (
+                <div>
+                  <h3>Búsqueda:</h3>
+                  <SearchBar
+                    {...props.searchProps}
+                    className="custome-search-field"
+                    style={{ color: "black" }}
+                    delay={1000}
+                    placeholder="Buscar"
+                  />
+                  <hr />
+                  <BootstrapTable
+                    {...props.baseProps}
+                    expandRow={expandRow}
+                    pagination={paginationFactory()}
+                    striped
+                    hover
+                  />
+                </div>
+              )}
+            </ToolkitProvider>
           </ContenedorTabla>
         ) : (
           <h3>No hay productos en stock para mostrar</h3>
@@ -103,4 +146,4 @@ const ProductListStock = () => {
   );
 };
 
-export default ProductListStock;
+export default ProductListStockM;
