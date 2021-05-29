@@ -15,8 +15,12 @@ import styled from "styled-components";
 import theme from "./../../theme";
 import convertirAMoneda from "./../../funciones/convertirAMoneda";
 import { Table } from "react-bootstrap";
-import { BotonAccionSmall, BotonAccionSmallForm } from "./../../elements/ElementosDeLista";
-import formatearFecha from "./../../funciones/formatearFecha"
+import {
+  BotonAccionSmall,
+  BotonAccionSmallForm,
+} from "./../../elements/ElementosDeLista";
+import formatearFecha from "./../../funciones/formatearFecha";
+import editSaleCredit from "./../../firebase/sales/editSaleCredit";
 
 const Cabecera = styled.th`
   text-align: center;
@@ -61,6 +65,8 @@ const FormularioReceipt = ({ receipt }) => {
 
   const [paidingUp, setPaidingUp] = useState(false);
   const [objectIndexToModify, setObjectIndexToModify] = useState("");
+  const [invoiceNumberCredit, setInvoiceNumberCredit] = useState("");
+  const [dateSaleCredit, setDateSaleCredit] = useState("");
   const [inputAmountToPay, setInputAmountToPay] = useState(0);
 
   const [inputInvoiceReceipt, setInputInvoiceReceipt] = useState("");
@@ -68,6 +74,7 @@ const FormularioReceipt = ({ receipt }) => {
   const [dateReceipt, setDateReceipt] = useState(new Date());
   const [total, setTotal] = useState(0);
   const [salesCreditPaidUp, setSalesCreditPaidUp] = useState([]);
+  const [oldSales, setOldSales] = useState([]);
 
   const [estadoAlerta, setEstadoAlerta] = useState(false);
   const [alerta, setAlerta] = useState({});
@@ -81,6 +88,7 @@ const FormularioReceipt = ({ receipt }) => {
       setDateReceipt(fromUnixTime(receipt.data().dateReceipt));
       setTotal(receipt.data().total);
       setSalesCreditPaidUp(receipt.data().salesCreditPaidUp);
+      setOldSales(receipt.data().salesCreditPaidUp);
     }
   }, [receipt, clients]);
 
@@ -95,8 +103,11 @@ const FormularioReceipt = ({ receipt }) => {
           sale.paidUp < sale.total
         ) {
           saleFromClient = {
-            ...sale,
-            paidingUp: false,
+            idSale: sale.id,
+            invoiceNumber: sale.invoiceNumber,
+            dateSale: sale.dateSale,
+            totalSale: sale.total,
+            paidUpSale: sale.paidUp,
             amountPaid: 0,
           };
           salesFromClient.push(saleFromClient);
@@ -141,13 +152,49 @@ const FormularioReceipt = ({ receipt }) => {
     chargeSalesCredit(e.currentTarget.dataset.valor);
   };
 
+  /**
+   * Abre el formulario de facturas que se pagaran, para definir el monto a pagar
+   */
   const addToGoToPay = (e) => {
     e.preventDefault();
     setObjectIndexToModify(e.target.id);
-    setInputAmountToPay(salesCreditPaidUp[e.target.id].total);
+    setInvoiceNumberCredit(salesCreditPaidUp[e.target.id].invoiceNumber);
+    setDateSaleCredit(
+      formatearFecha(salesCreditPaidUp[e.target.id].dateSale, "dd/MM/yyyy")
+    );
+    setInputAmountToPay(
+      salesCreditPaidUp[e.target.id].totalSale -
+        salesCreditPaidUp[e.target.id].paidUpSale
+    );
     setPaidingUp(true);
   };
 
+  /**
+   * Abre el formulario para modificar un recibo que se cargó anteriormente
+   * @param {event} e
+   */
+  const modifyToGoToPay = (e) => {
+    e.preventDefault();
+    setObjectIndexToModify(e.target.id);
+    setInvoiceNumberCredit(salesCreditPaidUp[e.target.id].invoiceNumber);
+    setDateSaleCredit(
+      formatearFecha(salesCreditPaidUp[e.target.id].dateSale, "dd/MM/yyyy")
+    );
+    setInputAmountToPay(
+      salesCreditPaidUp[e.target.id].totalSale -
+        salesCreditPaidUp[e.target.id].paidUpSale
+    );
+    setPaidingUp(true);
+    setTotal(
+      (prevState) =>
+        prevState - Number(salesCreditPaidUp[e.target.id].amountPaid)
+    );
+  };
+
+  /**
+   * Agrega un detalle al recibo
+   * @param {event} e
+   */
   const addToPay = (e) => {
     e.preventDefault();
     const newSalesCreditPaidUp = salesCreditPaidUp.map((sale, index) => {
@@ -155,15 +202,24 @@ const FormularioReceipt = ({ receipt }) => {
         return {
           ...sale,
           paidingUp: true,
-          amountPaid: inputAmountToPay,
+          amountPaid: Number(inputAmountToPay),
         };
       }
       return sale;
     });
     setSalesCreditPaidUp(newSalesCreditPaidUp);
-    setTotal((prevState) => prevState + inputAmountToPay);
+    setTotal((prevState) => prevState + Number(inputAmountToPay));
+    setObjectIndexToModify("");
+    setInvoiceNumberCredit("");
+    setDateSaleCredit("");
+    setInputAmountToPay("");
+    setPaidingUp(false);
   };
 
+  /**
+   * Guarda el recibo en la base de datos. Modifica el campo de la colleccion sales de paidUp
+   * @param {event} e
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setEstadoAlerta(false);
@@ -183,6 +239,25 @@ const FormularioReceipt = ({ receipt }) => {
           salesCreditPaidUp: salesCreditPaidUp,
         })
           .then(() => {
+            salesCreditPaidUp.forEach((sale, index) => {
+              if (oldSales[index].amountPaid !== sale.amountPaid) {
+                let paidUp = 0;
+                sales.forEach((saleOriginal) => {
+                  if (saleOriginal.invoiceNumber === sale.invoiceNumber) {
+                    paidUp = saleOriginal.paidUp;
+                  }
+                });
+                editSaleCredit({
+                  id: sale.idSale,
+                  paidUp:
+                    sale.amountPaid + 
+                    paidUp - 
+                    oldSales[index].amountPaid, 
+                });
+              }
+            });
+          })
+          .then(() => {
             history.push("/receipts");
           })
           .catch((error) => {
@@ -196,6 +271,14 @@ const FormularioReceipt = ({ receipt }) => {
           total: total,
           salesCreditPaidUp: salesCreditPaidUp,
         })
+          .then(() => {
+            salesCreditPaidUp.forEach((sale) => {
+              editSaleCredit({
+                id: sale.idSale,
+                paidUp: sale.amountPaid + sale.paidUpSale,
+              });
+            });
+          })
           .then(() => {
             setInputInvoiceReceipt("");
             setInputClient("");
@@ -242,13 +325,23 @@ const FormularioReceipt = ({ receipt }) => {
           </Form.Group>
           <Form.Group as={Col} controlId="formGridClient">
             <Form.Label>Cliente</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Cliente"
-              name="client"
-              value={inputClient}
-              onChange={handleChange}
-            />
+            {!receipt ? (
+              <Form.Control
+                type="text"
+                placeholder="Cliente"
+                name="client"
+                value={inputClient}
+                onChange={handleChange}
+              />
+            ) : (
+              <Form.Control
+                type="text"
+                placeholder="Cliente"
+                name="client"
+                value={inputClient}
+                readOnly
+              />
+            )}
             {dataMatch && (
               <Opciones>
                 {dataMatch.map((item, index) => (
@@ -271,7 +364,25 @@ const FormularioReceipt = ({ receipt }) => {
         </Form.Row>
         {paidingUp && (
           <Form.Row>
-            <Form.Group as={Col} xs={4} controlId="formGridToPay">
+            <Form.Group as={Col} xs={3} controlId="formGridToPay">
+              <Form.Label>N° Factura</Form.Label>
+              <Form.Control
+                type="text"
+                name="invoiceNumberCredit"
+                value={invoiceNumberCredit}
+                readOnly
+              />
+            </Form.Group>
+            <Form.Group as={Col} xs={3} controlId="formGridToPay">
+              <Form.Label>Fecha venta</Form.Label>
+              <Form.Control
+                type="text"
+                name="dateSaleCredit"
+                value={dateSaleCredit}
+                readOnly
+              />
+            </Form.Group>
+            <Form.Group as={Col} xs={3} controlId="formGridToPay">
               <Form.Label>Monto a pagar</Form.Label>
               <Form.Control
                 type="text"
@@ -286,6 +397,10 @@ const FormularioReceipt = ({ receipt }) => {
             </BotonAccionSmall>
           </Form.Row>
         )}
+        {salesCreditPaidUp.length===0
+        ?
+        <h4>No hay ventas de crédito pendientes</h4>
+        :
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -301,10 +416,17 @@ const FormularioReceipt = ({ receipt }) => {
               <tr key={index}>
                 <Fila>{detail.invoiceNumber}</Fila>
                 <Fila>{formatearFecha(detail.dateSale, "dd/MM/yyyy")}</Fila>
-                <Fila>{convertirAMoneda(detail.total)}</Fila>
+                <Fila>
+                  {convertirAMoneda(detail.totalSale - detail.paidUpSale)}
+                </Fila>
                 <Fila>
                   {detail.paidingUp ? (
-                    "Pagando"
+                    <BotonAccionSmallForm
+                      id={index}
+                      onClick={(e) => modifyToGoToPay(e)}
+                    >
+                      Modificar
+                    </BotonAccionSmallForm>
                   ) : (
                     <BotonAccionSmallForm
                       id={index}
@@ -327,6 +449,8 @@ const FormularioReceipt = ({ receipt }) => {
             </tr>
           </tbody>
         </Table>
+        }
+        
         <ContenedorBoton>
           <Boton as="button" primario type="submit">
             {receipt ? "Editar Recibo" : "Agregar Recibo"}

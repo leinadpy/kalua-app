@@ -6,12 +6,14 @@ const editReceipt = ({
   client,
   dateReceipt,
   salesCreditPaidUp,
+  total,
 }) => {
   return db.collection("receipts").doc(id).update({
     invoiceReceipt: invoiceReceipt,
     client: client,
     dateReceipt: dateReceipt,
     salesCreditPaidUp: salesCreditPaidUp,
+    total: total,
   });
 };
 

@@ -15,14 +15,37 @@ import Boton from "./../../elements/Boton";
 import { Link } from "react-router-dom";
 import convertirAMoneda from "./../../funciones/convertirAMoneda";
 import formatearFecha from "./../../funciones/formatearFecha";
+import useGetSales from "./../../hooks/sales/useGetSales";
+import editSaleCredit from "./../../firebase/sales/editSaleCredit";
 
 const ReceiptList = () => {
+  const [sales] = useGetSales();
+
   const [receipts, setReceipts] = useState("");
   const [cargando, setCargando] = useState(true);
 
   const [dataReceipts] = useGetReceipts();
 
   useEffect(() => {
+    const onDeleteReceipt = (id) => {
+      dataReceipts.forEach((receipt) => {
+        if (receipt.id === id) {
+          receipt.salesCreditPaidUp.forEach((salePaid) => {
+            let paidUp = 0;
+            sales.forEach((saleOriginal) => {
+              if (saleOriginal.id === salePaid.idSale) {
+                paidUp = saleOriginal.paidUp;
+              }
+            });
+            editSaleCredit({
+              id: salePaid.idSale,
+              paidUp: paidUp - salePaid.amountPaid,
+            });
+          });
+        }
+      });
+      deleteReceipt(id);
+    };
     var datosFormateados = [];
     var datoFormateado = {};
     const formatData = (datos) => {
@@ -37,7 +60,7 @@ const ReceiptList = () => {
               <Boton to={`/receipts/edit/${dato.id}`} small="true" as={Link}>
                 <IconoEditar />
               </Boton>
-              <Boton small="true" onClick={() => deleteReceipt(dato.id)}>
+              <Boton small="true" onClick={() => onDeleteReceipt(dato.id)}>
                 <IconoBorrar />
               </Boton>
             </>
@@ -49,7 +72,7 @@ const ReceiptList = () => {
     formatData(dataReceipts);
     setReceipts(datosFormateados);
     setCargando(false);
-  }, [dataReceipts]);
+  }, [dataReceipts, sales]);
 
   const data = {
     columns: [
@@ -67,7 +90,7 @@ const ReceiptList = () => {
       },
       {
         label: "Fecha recibo",
-        field: "dateSale",
+        field: "dateReceipt",
         sort: "asc",
         width: 150,
       },

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Header, Titulo, ContenedorHeader } from "./../../elements/Header";
 import { Helmet } from "react-helmet";
-import { useStockProduct } from "./../../contextos/ProductStockContext";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
@@ -13,6 +12,8 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import Boton from "./../../elements/Boton";
 import { Link } from "react-router-dom";
 import formatearFecha from "./../../funciones/formatearFecha";
+import useGetSales from "./../../hooks/sales/useGetSales";
+import convertirAMoneda from "./../../funciones/convertirAMoneda"
 
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
@@ -20,66 +21,75 @@ import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.c
 
 const { SearchBar } = Search;
 
-const ProductListStock = () => {
-  const [productsStock, setProductsStock] = useState("");
+const ClientsStatus = () => {
+  const [sales] = useGetSales();
+
+  const [clientsStatus, setClientsStatus] = useState([]);
   const [cargando, setCargando] = useState(true);
 
-  const dataProductsStock = useStockProduct();
-
   useEffect(() => {
-    var datosFormateados = [];
-    var datoFormateado = {};
-    const formatData = (datos) => {
-      datos.forEach((dato, index) => {
-        datoFormateado = {
-          id: index,
-          code: dato.code,
-          product: dato.product,
-          sizeCode: dato.sizeCode,
-          colorCode: dato.colorCode,
-          quantity: dato.quantity,
-          idPurchase: dato.idPurchase,
-        };
-        datosFormateados.push(datoFormateado);
+    const salesPending = [];
+    const clientDeb = [];
+    const clientWithSales = [];
+    sales.forEach((sale) => {
+      if (sale.total !== sale.paidUp) {
+        salesPending.push(sale);
+        clientDeb.push(sale.client);
+      }
+    });
+    const clientUniqueDeb = clientDeb.filter((item, index) => {
+      return clientDeb.indexOf(item) === index;
+    });
+    clientUniqueDeb.forEach((client, index) => {
+      let suma = 0;
+      const salesClient = [];
+      salesPending.forEach((sale) => {
+        suma += sale.client === client ? sale.total - sale.paidUp : 0;
+        if (sale.client === client) {
+          salesClient.push(sale);
+        }
       });
-    };
-    formatData(dataProductsStock);
-    setProductsStock(datosFormateados);
+      clientWithSales.push({
+        id: index,
+        client: client,
+        salesCreditPending: salesClient,
+        totalDeb: convertirAMoneda(suma),
+      });
+    });
     setCargando(false);
-  }, [dataProductsStock]);
+    setClientsStatus(clientWithSales);
+  }, [sales]);
 
-  const dataProducts = productsStock;
   const columns = [
-    { dataField: "code", text: "Código" },
-    { dataField: "product", text: "Descripción" },
-    { dataField: "sizeCode", text: "Tamaño" },
-    { dataField: "colorCode", text: "Color" },
-    { dataField: "quantity", text: "Cantidad" },
+    { dataField: "client", text: "Cliente" },
+    { dataField: "totalDeb", text: "Deuda Total" },
   ];
 
   const expandRow = {
     renderer: (row) => (
       <div>
-        {productsStock[row.id].idPurchase &&
-          productsStock[row.id].idPurchase.map((purchase) => (
-            <p key={purchase.id}>
+        {clientsStatus[row.id].salesCreditPending &&
+          clientsStatus[row.id].salesCreditPending.map((sale, index) => (
+            <p key={index}>
               <span style={{ marginRight: "50px" }}>
-                Factura Nº: {purchase.invoiceNumber}
+                Factura Nº: {sale.invoiceNumber}
               </span>
               <span style={{ marginRight: "50px" }}>
-                Fecha compra:{" "}
-                {formatearFecha(purchase.datePurchase, "dd/MM/yyyy")}
+                Fecha venta: {formatearFecha(sale.dateSale, "dd/MM/yyyy")}
               </span>
               <span style={{ marginRight: "50px" }}>
-                Cantidad comprada: {purchase.quantityOfPurchase}
+                Monto pagado: {convertirAMoneda(sale.paidUp)}
+              </span>
+              <span style={{ marginRight: "50px" }}>
+                Total venta: {convertirAMoneda(sale.total)}
               </span>
               <Boton
-                to={`/purchases/edit/${purchase.id}`}
+                to={`/sales/edit/${sale.id}`}
                 small="true"
                 as={Link}
                 style={{ textDecoration: "none", color: "white" }}
               >
-                Ir a compra
+                Ir a venta
               </Boton>
             </p>
           ))}
@@ -91,21 +101,21 @@ const ProductListStock = () => {
   return (
     <>
       <Helmet>
-        <title>Stock de productos</title>
+        <title>Cuentas de clientes</title>
       </Helmet>
       <Menu />
       <Header>
         <ContenedorHeader>
-          <Titulo>Stock de productos</Titulo>
+          <Titulo>Estado de cuenta de clientes</Titulo>
         </ContenedorHeader>
       </Header>
 
       {!cargando ? (
-        dataProductsStock.length !== 0 ? (
+        clientsStatus.length !== 0 ? (
           <ContenedorTabla>
             <ToolkitProvider
               keyField="id"
-              data={dataProducts}
+              data={clientsStatus}
               columns={columns}
               search
             >
@@ -132,7 +142,7 @@ const ProductListStock = () => {
             </ToolkitProvider>
           </ContenedorTabla>
         ) : (
-          <h3>No hay productos en stock para mostrar</h3>
+          <h3>No hay clientes con deuda para mostrar</h3>
         )
       ) : (
         <div
@@ -146,4 +156,4 @@ const ProductListStock = () => {
   );
 };
 
-export default ProductListStock;
+export default ClientsStatus;

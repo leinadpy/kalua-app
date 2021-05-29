@@ -48,6 +48,9 @@ const Menu = () => {
             <NavDropdown.Item as={Link} to="/clients">
               Lista de Clientes
             </NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="/clients/status">
+              Estado de cuenta de Clientes
+            </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Movimiento" id="basic-nav-dropdown">
             <NavDropdown.Item as={Link} to="/purchases/new-purchase">

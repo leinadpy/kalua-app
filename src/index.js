@@ -29,6 +29,7 @@ import ProductListStock from "./components/Product/ProductListStock";
 import NewClient from "./components/Client/NewClient";
 import ClientList from "./components/Client/ClientList";
 import EditClient from "./components/Client/EditClient";
+import ClientsStatus from "./components/Client/ClientsStatus";
 
 import NewPurchase from "./components/Purchase/NewPurchase";
 import PurchaseList from "./components/Purchase/PurchaseList";
@@ -106,6 +107,9 @@ const Index = () => {
                 </RutaPrivada>
                 <RutaPrivada path="/clients/edit/:id">
                   <EditClient />
+                </RutaPrivada>
+                <RutaPrivada path="/clients/status">
+                  <ClientsStatus />
                 </RutaPrivada>
                 <RutaPrivada path="/clients">
                   <ClientList />
