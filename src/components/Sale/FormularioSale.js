@@ -62,8 +62,8 @@ const FormularioSale = ({ sale }) => {
 
   useEffect(() => {
     setDataList(clients);
-    // Comprobamos si ya hay alguna compra.
-    // De ser así establecemos todo el state con los valores de la compra.
+    // Comprobamos si ya hay alguna venta.
+    // De ser así establecemos todo el state con los valores de la venta.
     if (sale) {
       setInputInvoiceNumber(sale.data().invoiceNumber);
       setInputClient(sale.data().client);

@@ -9,6 +9,7 @@ import "mdbreact/dist/css/mdb.css";
 import ContenedorTabla from "./../../elements/ContenedorTabla";
 import Menu from "./../Menu";
 import { ReactComponent as IconoEditar } from "./../../imagenes/editar.svg";
+import { ReactComponent as IconoPDF } from "./../../imagenes/pdf.svg";
 import { ReactComponent as IconoBorrar } from "./../../imagenes/borrar.svg";
 import { MDBDataTable } from "mdbreact";
 import Boton from "./../../elements/Boton";
@@ -41,6 +42,9 @@ const SaleList = () => {
               </Boton>
               <Boton small="true" onClick={() => deleteSale(dato.id)}>
                 <IconoBorrar />
+              </Boton>
+              <Boton to={`/sales/pdf/${dato.id}`} small="true" as={Link}>
+                <IconoPDF />
               </Boton>
             </>
           ),

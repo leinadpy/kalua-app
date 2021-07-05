@@ -40,10 +40,14 @@ import NewSale from "./components/Sale/NewSale";
 import SaleList from "./components/Sale/SaleList";
 import EditSale from "./components/Sale/EditSale";
 import ReportSale from "./components/Sale/ReportSale";
+import PDFVisualizationSale from "./components/Sale/PDFVisualizationSale";
 
 import NewReceipt from "./components/Receipt/NewReceipt";
 import ReceiptList from "./components/Receipt/ReceiptList";
 import EditReceipt from "./components/Receipt/EditReceipt";
+
+import MyDocument from "./pdf/MyDocument"
+import PDFVisualization from "./pdf/PDFVisualization";
 
 import { StockProductProvider } from "./contextos/ProductStockContext";
 
@@ -137,6 +141,9 @@ const Index = () => {
                 <RutaPrivada path="/salesreports">
                   <ReportSale />
                 </RutaPrivada>
+                <RutaPrivada path="/sales/pdf/:id">
+                  <PDFVisualizationSale />
+                </RutaPrivada>
                 <RutaPrivada path="/sales">
                   <SaleList />
                 </RutaPrivada>
@@ -152,6 +159,10 @@ const Index = () => {
                 </RutaPrivada> */}
                 <RutaPrivada path="/receipts">
                   <ReceiptList />
+                </RutaPrivada>
+
+                <RutaPrivada path="/mydocument">
+                  <PDFVisualization ToRender={MyDocument} />
                 </RutaPrivada>
 
                 <RutaPrivada path="/">

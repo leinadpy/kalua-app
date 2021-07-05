@@ -94,6 +94,12 @@ const Menu = () => {
               Productos en stock
             </NavDropdown.Item>
           </NavDropdown>
+          <NavDropdown title="PDFs" id="basic-nav-dropdown">
+            <NavDropdown.Item as={Link} to="/mydocument">
+              My Document
+            </NavDropdown.Item>
+            <NavDropdown.Divider />
+          </NavDropdown>
         </Nav>
         <BotonCerrarSesion />
       </Navbar.Collapse>
