@@ -77,10 +77,10 @@ const FormularioSale = ({ sale }) => {
   }, [sale, clients]);
 
   useEffect(() => {
-    if (radiusTypeOfSale !== "Crédito") {
-      setPaidUp(total);
-    } else {
+    if (radiusTypeOfSale !== "Contado") {
       setPaidUp(0);
+    } else {
+      setPaidUp(total);
     }
   }, [radiusTypeOfSale, setPaidUp, total]);
 
@@ -249,6 +249,14 @@ const FormularioSale = ({ sale }) => {
               name="typeOfSale"
               value="Contado"
               checked={radiusTypeOfSale === "Contado"}
+              onChange={handleChange}
+            />
+            <Form.Check
+              label="Muestra"
+              type="radio"
+              name="typeOfSale"
+              value="Muestra"
+              checked={radiusTypeOfSale === "Muestra"}
               onChange={handleChange}
             />
           </Form.Group>

@@ -75,6 +75,9 @@ const ClientsStatus = () => {
                 Factura Nº: {sale.invoiceNumber}
               </span>
               <span style={{ marginRight: "50px" }}>
+                Tipo: {sale.typeOfSale}
+              </span>
+              <span style={{ marginRight: "50px" }}>
                 Fecha venta: {formatearFecha(sale.dateSale, "dd/MM/yyyy")}
               </span>
               <span style={{ marginRight: "50px" }}>
@@ -93,6 +96,14 @@ const ClientsStatus = () => {
               </Boton>
             </p>
           ))}
+        <Boton
+          to={`/sales/edit/`}
+          small="true"
+          as={Link}
+          style={{ textDecoration: "none", color: "white" }}
+        >
+          Ir a venta
+        </Boton>
       </div>
     ),
     showExpandColumn: true,

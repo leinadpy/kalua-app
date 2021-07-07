@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const SaleToPDF = ({ sale }) => {
+const ClientStatusToPDF = ({ sale }) => {
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [dateSale, setDateSale] = useState("");
   const [client, setClient] = useState("");
@@ -217,4 +217,4 @@ const SaleToPDF = ({ sale }) => {
   );
 };
 
-export default SaleToPDF;
+export default ClientStatusToPDF;

@@ -99,7 +99,7 @@ const FormularioReceipt = ({ receipt }) => {
       sales.forEach((sale) => {
         if (
           sale.client === comparador &&
-          sale.typeOfSale === "Crédito" &&
+          sale.typeOfSale !== "Contado" &&
           sale.paidUp < sale.total
         ) {
           saleFromClient = {
